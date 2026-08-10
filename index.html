@@ -3,8 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quick PDF Tools — Merge, Split, Convert (100% in your browser)</title>
+<title>meldpdf — Merge, Split & Convert PDF (100% in your browser)</title>
 <meta name="description" content="Free online PDF tools: merge PDFs, split/extract pages, convert images to PDF, PDF to JPG, and rotate. Everything runs in your browser — your files are never uploaded.">
+<link rel="canonical" href="https://meldpdf.com/">
+<meta property="og:title" content="meldpdf — private, browser-based PDF tools">
+<meta property="og:description" content="Merge, split, convert and rotate PDFs. Files never leave your device.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meldpdf.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233355ff'/%3E%3Crect x='9' y='7' width='14' height='18' rx='2' fill='white'/%3E%3C/svg%3E">
+<!-- AdSense: after approval, put your ca-pub-XXXX id in ADSENSE_CLIENT (bottom of file); the loader + slots activate automatically. -->
 <style>
   :root{
     --bg:#eef1f6; --ink:#101725; --soft:#5a6577; --line:#d6dbe6; --card:#ffffff;
@@ -62,11 +69,32 @@
   .mini{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:13px}
   .mini b{display:block;color:var(--ink);margin-bottom:3px}
   footer{margin-top:30px;font-size:12px;color:var(--soft);text-align:center}
+  footer a{color:var(--soft)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  .nav{display:flex;gap:16px;font-size:14px}
+  .nav a{color:var(--soft);text-decoration:none;font-weight:600}
+  .nav a:hover{color:var(--brand)}
+  .adslot{margin:22px 0;min-height:90px;display:flex;align-items:center;justify-content:center;
+    border:1px dashed var(--line);border-radius:10px;color:var(--soft);font-size:12px;background:var(--card)}
+  .adslot[data-live="1"]{border:0;min-height:0;background:transparent}
+  .guides{margin-top:36px}
+  .guides h2{font-size:19px;color:var(--ink)}
+  .guidelinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+  .guidelinks a{background:var(--card);border:1px solid var(--line);border-radius:20px;
+    padding:8px 14px;font-size:13px;font-weight:600;text-decoration:none;color:var(--ink)}
+  .guidelinks a:hover{border-color:var(--brand);color:var(--brand)}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="brand"><span class="logo"></span> Quick PDF Tools</div>
+  <div class="topbar">
+    <div class="brand"><span class="logo"></span> meldpdf</div>
+    <nav class="nav">
+      <a href="/#merge">Tools</a>
+      <a href="/merge-pdf.html">Guides</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
+  </div>
   <h1>PDF tools that never upload your files</h1>
   <p class="sub">Merge, split, convert and rotate PDFs — free, no sign-up, no watermarks.</p>
   <div class="priv">🔒 Everything runs in your browser. Files never leave your device.</div>
@@ -107,9 +135,22 @@
     <div class="status" id="status"></div>
   </div>
 
+  <div class="adslot" data-ad="top">Advertisement</div>
+
+  <section class="guides">
+    <h2>How-to guides</h2>
+    <div class="guidelinks">
+      <a href="/merge-pdf.html">Merge PDF files</a>
+      <a href="/split-pdf.html">Split &amp; extract pages</a>
+      <a href="/jpg-to-pdf.html">Convert JPG to PDF</a>
+      <a href="/pdf-to-jpg.html">Convert PDF to JPG</a>
+      <a href="/rotate-pdf.html">Rotate a PDF</a>
+    </div>
+  </section>
+
   <section class="seo">
     <h2>Free browser-based PDF toolkit</h2>
-    <p>Unlike most online PDF converters, Quick PDF Tools processes everything locally in your browser using WebAssembly. Your documents are never sent to a server, so it's safe for contracts, payslips, IDs and other sensitive files. No account, no email, no watermark, no file-size games.</p>
+    <p>Unlike most online PDF converters, meldpdf processes everything locally in your browser using WebAssembly. Your documents are never sent to a server, so it's safe for contracts, payslips, IDs and other sensitive files. No account, no email, no watermark, no file-size games.</p>
     <div class="cardsgrid">
       <div class="mini"><b>Merge PDF</b>Combine multiple PDFs into one, in any order.</div>
       <div class="mini"><b>Split / Extract</b>Pull out specific pages or page ranges.</div>
@@ -119,12 +160,46 @@
       <div class="mini"><b>100% private</b>Files stay on your device — always.</div>
     </div>
   </section>
-  <footer>Runs entirely in your browser · pdf-lib &amp; PDF.js · no files uploaded</footer>
+
+  <div class="adslot" data-ad="bottom">Advertisement</div>
+
+  <footer>
+    <a href="/privacy.html">Privacy Policy</a> ·
+    <a href="/#merge">Tools</a> ·
+    Runs entirely in your browser · pdf-lib &amp; PDF.js · no files uploaded<br>
+    © <span id="yr"></span> meldpdf
+  </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 <script>
+/* ===== AdSense: paste your publisher id here after approval, e.g. "ca-pub-1234567890123456".
+   While empty, ad slots show a neutral placeholder and no AdSense code loads. ===== */
+const ADSENSE_CLIENT = "";
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+function initAds(){
+  if(!ADSENSE_CLIENT){ return; } // slots stay as placeholders until an id is set
+  const s=document.createElement('script');
+  s.async=true; s.crossOrigin="anonymous";
+  s.src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client="+ADSENSE_CLIENT;
+  document.head.appendChild(s);
+  document.querySelectorAll('.adslot').forEach(slot=>{
+    slot.dataset.live="1"; slot.textContent="";
+    const ins=document.createElement('ins');
+    ins.className="adsbygoogle";
+    ins.style.display="block"; ins.style.width="100%";
+    ins.setAttribute("data-ad-client",ADSENSE_CLIENT);
+    ins.setAttribute("data-ad-format","auto");
+    ins.setAttribute("data-full-width-responsive","true");
+    // TODO: create ad units in AdSense and set data-ad-slot per placement.
+    slot.appendChild(ins);
+    (window.adsbygoogle=window.adsbygoogle||[]).push({});
+  });
+}
+
 const { PDFDocument, degrees } = PDFLib;
 if (window['pdfjsLib']) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
@@ -260,7 +335,11 @@ async function run(){
     setStatus('✓ Exported '+pdf.numPages+' page(s) as JPG.','ok');
   }
 }
-setTool('merge');
+const validTool = t => Object.prototype.hasOwnProperty.call(TOOLS,t);
+const fromHash = () => { const h=location.hash.replace('#',''); return validTool(h)?h:'merge'; };
+setTool(fromHash());
+window.addEventListener('hashchange',()=>setTool(fromHash()));
+initAds();
 </script>
 </body>
 </html>
