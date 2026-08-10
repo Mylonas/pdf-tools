@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick PDF Tools — Merge, Split, Convert (100% in your browser)</title>
+<meta name="description" content="Free online PDF tools: merge PDFs, split/extract pages, convert images to PDF, PDF to JPG, and rotate. Everything runs in your browser — your files are never uploaded.">
+<style>
+  :root{
+    --bg:#eef1f6; --ink:#101725; --soft:#5a6577; --line:#d6dbe6; --card:#ffffff;
+    --brand:#3355ff; --brand-soft:#e6ebff; --ok:#0f9d63; --danger:#d23b3b;
+    --sans:"Helvetica Neue",Arial,system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#0c0f16;--ink:#e7eaf1;--soft:#98a2b4;--line:#232a38;--card:#141924;
+      --brand:#6d86ff;--brand-soft:#182142;--ok:#3fc38a;--danger:#e56b6b;}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .wrap{max-width:820px;margin:0 auto;padding:clamp(16px,4vw,40px)}
+  .brand{font-weight:800;font-size:20px;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
+  .logo{width:26px;height:26px;border-radius:7px;background:var(--brand);position:relative;flex:none}
+  .logo::after{content:"";position:absolute;inset:6px 8px;border:2px solid #fff;border-radius:2px;border-top:0}
+  .logo::before{content:"";position:absolute;top:5px;left:8px;right:8px;height:5px;background:#fff;border-radius:2px 2px 0 0}
+  h1{font-size:clamp(23px,4vw,32px);letter-spacing:-.02em;margin:.7em 0 .1em;text-wrap:balance}
+  .sub{color:var(--soft);margin:0 0 1.2em}
+  .priv{display:inline-flex;align-items:center;gap:7px;background:var(--brand-soft);color:var(--brand);
+    font-size:13px;font-weight:700;padding:6px 12px;border-radius:20px;margin-bottom:22px}
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+  .tabs button{border:1.5px solid var(--line);background:var(--card);color:var(--soft);
+    padding:9px 15px;border-radius:22px;font-weight:700;cursor:pointer;font-size:14px}
+  .tabs button.on{border-color:var(--brand);background:var(--brand);color:#fff}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+  .toolhead{font-weight:800;font-size:18px;margin:0 0 4px}
+  .tooldesc{color:var(--soft);font-size:14px;margin:0 0 18px}
+  .drop{border:2px dashed var(--line);border-radius:12px;padding:34px 20px;text-align:center;
+    cursor:pointer;transition:.15s;color:var(--soft)}
+  .drop:hover,.drop.over{border-color:var(--brand);background:var(--brand-soft);color:var(--brand)}
+  .drop b{color:var(--ink);font-size:16px}
+  .drop.over b{color:var(--brand)}
+  .files{list-style:none;padding:0;margin:16px 0 0;display:flex;flex-direction:column;gap:8px}
+  .files li{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);
+    border-radius:9px;padding:9px 12px;font-size:14px}
+  .files li .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .files li .sz{color:var(--soft);font-size:12px;white-space:nowrap}
+  .files li button{border:0;background:transparent;color:var(--soft);cursor:pointer;font-size:16px;padding:2px 6px}
+  .files li .mv{font-size:13px}
+  .opts{display:flex;flex-wrap:wrap;gap:14px;align-items:end;margin-top:16px}
+  .opts label{font-size:12px;font-weight:700;color:var(--soft);display:block;margin-bottom:5px}
+  .opts input,.opts select{padding:9px 11px;border:1.5px solid var(--line);border-radius:8px;
+    background:var(--bg);color:var(--ink);font-size:14px;font-family:inherit}
+  .go{margin-top:20px;width:100%;padding:14px;border:0;border-radius:11px;background:var(--brand);
+    color:#fff;font-size:16px;font-weight:800;cursor:pointer}
+  .go:disabled{opacity:.45;cursor:not-allowed}
+  .status{margin-top:14px;font-size:14px;color:var(--soft);min-height:20px}
+  .status.ok{color:var(--ok);font-weight:700}
+  .status.err{color:var(--danger);font-weight:700}
+  .hidden{display:none}
+  .seo{margin-top:40px;font-size:14px;color:var(--soft);line-height:1.7}
+  .seo h2{color:var(--ink);font-size:19px}
+  .cardsgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-top:10px}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:13px}
+  .mini b{display:block;color:var(--ink);margin-bottom:3px}
+  footer{margin-top:30px;font-size:12px;color:var(--soft);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><span class="logo"></span> Quick PDF Tools</div>
+  <h1>PDF tools that never upload your files</h1>
+  <p class="sub">Merge, split, convert and rotate PDFs — free, no sign-up, no watermarks.</p>
+  <div class="priv">🔒 Everything runs in your browser. Files never leave your device.</div>
+
+  <div class="tabs" id="tabs">
+    <button data-t="merge" class="on">Merge PDF</button>
+    <button data-t="split">Split / Extract</button>
+    <button data-t="img2pdf">Images → PDF</button>
+    <button data-t="pdf2img">PDF → JPG</button>
+    <button data-t="rotate">Rotate</button>
+  </div>
+
+  <div class="card">
+    <div class="toolhead" id="toolTitle">Merge PDF</div>
+    <div class="tooldesc" id="toolDesc">Combine several PDFs into one. Drag files to reorder.</div>
+
+    <div class="drop" id="drop">
+      <b>Drop files here</b> or click to choose<br>
+      <span id="accepthint">PDF files</span>
+    </div>
+    <input type="file" id="picker" class="hidden" multiple>
+    <ul class="files" id="fileList"></ul>
+
+    <div class="opts hidden" id="splitOpts">
+      <div><label>Pages to extract (e.g. 1-3, 5, 8-10)</label>
+        <input type="text" id="ranges" placeholder="1-3, 5" style="min-width:180px"></div>
+    </div>
+    <div class="opts hidden" id="rotateOpts">
+      <div><label>Rotate by</label>
+        <select id="angle"><option value="90">90° right</option><option value="180">180°</option><option value="270">90° left</option></select></div>
+    </div>
+    <div class="opts hidden" id="pdf2imgOpts">
+      <div><label>Quality</label>
+        <select id="scale"><option value="1.5">Standard</option><option value="2" selected>High</option><option value="3">Very high</option></select></div>
+    </div>
+
+    <button class="go" id="go" disabled>Add files to start</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <section class="seo">
+    <h2>Free browser-based PDF toolkit</h2>
+    <p>Unlike most online PDF converters, Quick PDF Tools processes everything locally in your browser using WebAssembly. Your documents are never sent to a server, so it's safe for contracts, payslips, IDs and other sensitive files. No account, no email, no watermark, no file-size games.</p>
+    <div class="cardsgrid">
+      <div class="mini"><b>Merge PDF</b>Combine multiple PDFs into one, in any order.</div>
+      <div class="mini"><b>Split / Extract</b>Pull out specific pages or page ranges.</div>
+      <div class="mini"><b>Images → PDF</b>Turn JPG/PNG photos into a single PDF.</div>
+      <div class="mini"><b>PDF → JPG</b>Export each page as a high-quality image.</div>
+      <div class="mini"><b>Rotate</b>Fix sideways or upside-down pages.</div>
+      <div class="mini"><b>100% private</b>Files stay on your device — always.</div>
+    </div>
+  </section>
+  <footer>Runs entirely in your browser · pdf-lib &amp; PDF.js · no files uploaded</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script>
+const { PDFDocument, degrees } = PDFLib;
+if (window['pdfjsLib']) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+const TOOLS={
+  merge:{title:'Merge PDF',desc:'Combine several PDFs into one. Drag to reorder.',accept:'application/pdf',hint:'PDF files',multi:true,btn:'Merge PDFs'},
+  split:{title:'Split / Extract pages',desc:'Extract specific pages or ranges from a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Extract pages'},
+  img2pdf:{title:'Images → PDF',desc:'Combine JPG/PNG images into a single PDF.',accept:'image/jpeg,image/png',hint:'JPG or PNG images',multi:true,btn:'Create PDF'},
+  pdf2img:{title:'PDF → JPG',desc:'Export every page of a PDF as a JPG image (zipped if multiple).',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to images'},
+  rotate:{title:'Rotate PDF',desc:'Rotate all pages of a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Rotate PDF'}
+};
+let current='merge', files=[];
+
+const $=id=>document.getElementById(id);
+const fmt=b=> b<1024?b+' B': b<1048576?(b/1024).toFixed(0)+' KB':(b/1048576).toFixed(1)+' MB';
+
+function setTool(t){
+  current=t; files=[];
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  const c=TOOLS[t];
+  $('toolTitle').textContent=c.title; $('toolDesc').textContent=c.desc;
+  $('accepthint').textContent=c.hint; $('picker').accept=c.accept; $('picker').multiple=c.multi;
+  $('splitOpts').classList.toggle('hidden',t!=='split');
+  $('rotateOpts').classList.toggle('hidden',t!=='rotate');
+  $('pdf2imgOpts').classList.toggle('hidden',t!=='pdf2img');
+  render(); setStatus('');
+}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>setTool(b.dataset.t));
+
+$('drop').onclick=()=>$('picker').click();
+$('picker').onchange=e=>addFiles(e.target.files);
+['dragover','dragenter'].forEach(ev=>$('drop').addEventListener(ev,e=>{e.preventDefault();$('drop').classList.add('over');}));
+['dragleave','drop'].forEach(ev=>$('drop').addEventListener(ev,e=>{e.preventDefault();$('drop').classList.remove('over');}));
+$('drop').addEventListener('drop',e=>addFiles(e.dataTransfer.files));
+
+function addFiles(list){
+  const c=TOOLS[current];
+  const accepted=c.accept.split(',');
+  for(const f of list){ if(accepted.some(a=>f.type===a)){ if(!c.multi) files=[]; files.push(f);} }
+  render();
+}
+function move(i,d){const j=i+d; if(j<0||j>=files.length)return; [files[i],files[j]]=[files[j],files[i]]; render();}
+function remove(i){files.splice(i,1);render();}
+
+function render(){
+  const ul=$('fileList'); ul.innerHTML='';
+  files.forEach((f,i)=>{
+    const li=document.createElement('li');
+    const reorder = TOOLS[current].multi && files.length>1
+      ? `<button class="mv" onclick="move(${i},-1)" title="Up">▲</button><button class="mv" onclick="move(${i},1)" title="Down">▼</button>`:'';
+    li.innerHTML=`<span class="nm">${f.name}</span><span class="sz">${fmt(f.size)}</span>${reorder}<button onclick="remove(${i})" title="Remove">✕</button>`;
+    ul.appendChild(li);
+  });
+  const go=$('go');
+  go.disabled=files.length===0;
+  go.textContent=files.length===0?'Add files to start':TOOLS[current].btn;
+}
+function setStatus(msg,cls=''){const s=$('status');s.textContent=msg;s.className='status '+cls;}
+function download(bytes,name,type){
+  const blob=new Blob([bytes],{type}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
+}
+function parseRanges(str,max){
+  const out=new Set();
+  str.split(',').forEach(part=>{
+    part=part.trim(); if(!part)return;
+    if(part.includes('-')){let[a,b]=part.split('-').map(n=>parseInt(n));
+      if(isNaN(a)||isNaN(b))return; for(let i=a;i<=b;i++) if(i>=1&&i<=max) out.add(i-1);}
+    else{const n=parseInt(part); if(n>=1&&n<=max) out.add(n-1);}
+  });
+  return [...out].sort((a,b)=>a-b);
+}
+
+$('go').onclick=async()=>{
+  $('go').disabled=true; setStatus('Working…');
+  try{ await run(); }
+  catch(err){ console.error(err); setStatus('Something went wrong: '+err.message,'err'); }
+  finally{ $('go').disabled=files.length===0; }
+};
+
+async function run(){
+  if(current==='merge'){
+    const out=await PDFDocument.create();
+    for(const f of files){
+      const src=await PDFDocument.load(await f.arrayBuffer());
+      const pages=await out.copyPages(src,src.getPageIndices());
+      pages.forEach(p=>out.addPage(p));
+    }
+    download(await out.save(),'merged.pdf','application/pdf');
+    setStatus('✓ Merged '+files.length+' files.','ok');
+  }
+  else if(current==='split'){
+    const src=await PDFDocument.load(await files[0].arrayBuffer());
+    const idx=parseRanges($('ranges').value,src.getPageCount());
+    if(!idx.length){setStatus('Enter valid page numbers (e.g. 1-3, 5).','err');return;}
+    const out=await PDFDocument.create();
+    const pages=await out.copyPages(src,idx); pages.forEach(p=>out.addPage(p));
+    download(await out.save(),'extracted.pdf','application/pdf');
+    setStatus('✓ Extracted '+idx.length+' page(s).','ok');
+  }
+  else if(current==='img2pdf'){
+    const out=await PDFDocument.create();
+    for(const f of files){
+      const bytes=await f.arrayBuffer();
+      const img= f.type==='image/png'? await out.embedPng(bytes): await out.embedJpg(bytes);
+      const page=out.addPage([img.width,img.height]);
+      page.drawImage(img,{x:0,y:0,width:img.width,height:img.height});
+    }
+    download(await out.save(),'images.pdf','application/pdf');
+    setStatus('✓ Created PDF from '+files.length+' image(s).','ok');
+  }
+  else if(current==='rotate'){
+    const src=await PDFDocument.load(await files[0].arrayBuffer());
+    const a=parseInt($('angle').value);
+    src.getPages().forEach(p=>{const cur=p.getRotation().angle; p.setRotation(degrees((cur+a)%360));});
+    download(await src.save(),'rotated.pdf','application/pdf');
+    setStatus('✓ Rotated all pages by '+a+'°.','ok');
+  }
+  else if(current==='pdf2img'){
+    const data=await files[0].arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data}).promise;
+    const scale=parseFloat($('scale').value);
+    for(let n=1;n<=pdf.numPages;n++){
+      setStatus('Rendering page '+n+' of '+pdf.numPages+'…');
+      const page=await pdf.getPage(n);
+      const vp=page.getViewport({scale});
+      const canvas=document.createElement('canvas');
+      canvas.width=vp.width; canvas.height=vp.height;
+      await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
+      const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.92));
+      download(blob,`page-${n}.jpg`,'image/jpeg');
+    }
+    setStatus('✓ Exported '+pdf.numPages+' page(s) as JPG.','ok');
+  }
+}
+setTool('merge');
+</script>
+</body>
+</html>
