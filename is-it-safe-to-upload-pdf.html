@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Is It Safe to Upload PDFs to Online Tools? — meldpdf</title>
+<meta name="description" content="What happens when you upload a PDF to an online converter, the real privacy risks, and how browser-based tools keep sensitive documents on your device.">
+<link rel="canonical" href="https://meldpdf.com/is-it-safe-to-upload-pdf">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233355ff'/%3E%3Crect x='9' y='7' width='14' height='18' rx='2' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
+    <nav class="nav"><a href="/#merge">Tools</a><a href="/merge-pdf">Guides</a><a href="/privacy">Privacy</a></nav>
+  </div>
+
+  <h1>Is it safe to upload PDFs to online tools?</h1>
+  <p class="lead">It depends entirely on where your file goes. Here's what actually happens behind most "free online PDF" sites — and how to avoid the risk.</p>
+
+  <h2>What "upload" really means</h2>
+  <p>With most online PDF converters, clicking "upload" sends your document to the company's <strong>server</strong>, where it is processed and then offered back for download. During that round trip your file leaves your device and sits, however briefly, on someone else's computer. For a holiday photo that's fine. For a <strong>contract, payslip, bank statement, medical record or ID scan</strong>, it means a copy of sensitive data has travelled across the internet to a third party.</p>
+
+  <h2>The real risks</h2>
+  <ul>
+    <li><strong>Retention:</strong> many services keep files for a period (often "deleted after 1 hour", but you're trusting that claim).</li>
+    <li><strong>Data handling:</strong> your document may pass through logs, backups, or sub-processors you can't see.</li>
+    <li><strong>Breach exposure:</strong> anything stored on a server can, in principle, be exposed if that server is compromised.</li>
+    <li><strong>Jurisdiction:</strong> the server may be in a country with different privacy laws than yours.</li>
+  </ul>
+
+  <div class="adslot" data-ad="guide">Advertisement</div>
+
+  <h2>How to tell if a tool uploads your file</h2>
+  <ul>
+    <li>Watch for a progress bar labelled "uploading" — that's your file leaving.</li>
+    <li>Check the privacy policy for words like "we store", "our servers", "retained for".</li>
+    <li>Try it offline: a genuinely browser-based tool keeps working with your Wi-Fi switched off after the page has loaded.</li>
+  </ul>
+
+  <h2>The safer alternative: browser-based processing</h2>
+  <p>Some modern tools — including meldpdf — do all the work <strong>inside your browser</strong> using JavaScript and WebAssembly. Your file is read into the page's memory on your own device, processed there, and handed back as a download. It is <strong>never sent anywhere</strong>. There's no server that receives it, so there's nothing to retain, log or breach. That makes it appropriate for exactly the sensitive documents you shouldn't upload elsewhere.</p>
+  <p>You can confirm it yourself: load <a href="/#merge">meldpdf</a>, disconnect from the internet, and the tools still work.</p>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>Are paid PDF services safer than free ones?</summary><p>Not necessarily — paid services often still process on their servers. "Where does the file go" matters more than "is it paid".</p></details>
+  <details><summary>Is browser-based processing slower?</summary><p>Usually it's faster, because there's no upload/download round trip — the work happens instantly on your device.</p></details>
+  <details><summary>Does meldpdf ever see my files?</summary><p>No. There is no meldpdf server that receives your documents. See our <a href="/privacy">privacy policy</a>.</p></details>
+
+  <div class="related">
+    <a href="/#merge">Merge PDFs</a>
+    <a href="/reduce-pdf-size">Reduce PDF size</a>
+    <a href="/combine-bank-statements">Combine bank statements</a>
+    <a href="/privacy">Privacy policy</a>
+  </div>
+  <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a></footer>
+</div>
+</body>
+</html>
