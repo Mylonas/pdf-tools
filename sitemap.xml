@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://meldpdf.com/</loc><priority>1.0</priority></url>
-  <url><loc>https://meldpdf.com/merge-pdf.html</loc><priority>0.8</priority></url>
-  <url><loc>https://meldpdf.com/split-pdf.html</loc><priority>0.8</priority></url>
-  <url><loc>https://meldpdf.com/jpg-to-pdf.html</loc><priority>0.8</priority></url>
-  <url><loc>https://meldpdf.com/pdf-to-jpg.html</loc><priority>0.8</priority></url>
-  <url><loc>https://meldpdf.com/rotate-pdf.html</loc><priority>0.8</priority></url>
-  <url><loc>https://meldpdf.com/privacy.html</loc><priority>0.3</priority></url>
+  <url><loc>https://meldpdf.com/merge-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://meldpdf.com/split-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://meldpdf.com/jpg-to-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://meldpdf.com/pdf-to-jpg</loc><priority>0.8</priority></url>
+  <url><loc>https://meldpdf.com/rotate-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://meldpdf.com/privacy</loc><priority>0.3</priority></url>
 </urlset>
