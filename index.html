@@ -11,7 +11,12 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://meldpdf.com/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233355ff'/%3E%3Crect x='9' y='7' width='14' height='18' rx='2' fill='white'/%3E%3C/svg%3E">
-<!-- AdSense: after approval, put your ca-pub-XXXX id in ADSENSE_CLIENT (bottom of file); the loader + slots activate automatically. -->
+<!-- ==== Verification hooks: uncomment + paste the value each service gives you ==== -->
+<!-- Google Search Console (HTML-tag method): -->
+<!-- <meta name="google-site-verification" content="PASTE_SC_TOKEN"> -->
+<!-- Google AdSense site verification (from AdSense > Sites): -->
+<!-- <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX"> -->
+<!-- AdSense ads: after approval, put your ca-pub id in ADSENSE_CLIENT (bottom of file); the loader + slots activate automatically. -->
 <style>
   :root{
     --bg:#eef1f6; --ink:#101725; --soft:#5a6577; --line:#d6dbe6; --card:#ffffff;
@@ -171,8 +176,8 @@
   </footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/pdf.min.js"></script>
 <script>
 /* ===== AdSense: paste your publisher id here after approval, e.g. "ca-pub-1234567890123456".
    While empty, ad slots show a neutral placeholder and no AdSense code loads. ===== */
@@ -201,7 +206,7 @@ function initAds(){
 }
 
 const { PDFDocument, degrees } = PDFLib;
-if (window['pdfjsLib']) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+if (window['pdfjsLib']) pdfjsLib.GlobalWorkerOptions.workerSrc='/vendor/pdf.worker.min.js';
 
 const TOOLS={
   merge:{title:'Merge PDF',desc:'Combine several PDFs into one. Drag to reorder.',accept:'application/pdf',hint:'PDF files',multi:true,btn:'Merge PDFs'},
