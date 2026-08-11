@@ -17,7 +17,7 @@
 <meta name="twitter:description" content="Merge, split, convert and rotate PDFs. Files never leave your device.">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
-{"@type":"WebApplication","name":"meldpdf","url":"https://meldpdf.com/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free browser-based PDF tools — merge, split, convert and rotate PDFs. Files never leave your device.","featureList":["Merge PDF","Split and extract pages","Images to PDF","PDF to JPG","Rotate PDF"]},
+{"@type":"WebApplication","name":"meldpdf","url":"https://meldpdf.com/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free browser-based PDF tools — merge, split, convert and rotate PDFs. Files never leave your device.","featureList":["Compress PDF","Merge PDF","Split and extract pages","Delete pages","Images to PDF","PDF to JPG","PDF to PNG","Rotate PDF","Add page numbers","Watermark PDF","Extract text"]},
 {"@type":"WebSite","name":"meldpdf","url":"https://meldpdf.com/"},
 {"@type":"Organization","name":"meldpdf","url":"https://meldpdf.com/"}
 ]}
@@ -49,6 +49,19 @@
   .sub{color:var(--soft);margin:0 0 1.2em}
   .priv{display:inline-flex;align-items:center;gap:7px;background:var(--brand-soft);color:var(--brand);
     font-size:13px;font-weight:700;padding:6px 12px;border-radius:20px;margin-bottom:22px}
+  .toolsearch{position:relative;margin-bottom:16px}
+  #toolSearch{width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:12px;
+    background:var(--card);color:var(--ink);font-size:15px;font-family:inherit}
+  #toolSearch:focus{outline:none;border-color:var(--brand)}
+  .searchhits{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--card);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;z-index:9;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+  .searchhits:empty{display:none}
+  .searchhits button{display:block;width:100%;text-align:left;border:0;background:transparent;
+    color:var(--ink);padding:11px 15px;font-size:14px;cursor:pointer;font-family:inherit}
+  .searchhits button:hover{background:var(--brand-soft);color:var(--brand)}
+  .result{margin-top:14px;background:var(--brand-soft);border:1px solid var(--line);border-radius:10px;
+    padding:14px;font-size:14px;color:var(--ink)}
+  .result b{color:var(--ok)}
   .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
   .tabs button{border:1.5px solid var(--line);background:var(--card);color:var(--soft);
     padding:9px 15px;border-radius:22px;font-weight:700;cursor:pointer;font-size:14px}
@@ -115,12 +128,23 @@
   <p class="sub">Merge, split, convert and rotate PDFs — free, no sign-up, no watermarks.</p>
   <div class="priv">🔒 Everything runs in your browser. Files never leave your device.</div>
 
+  <div class="toolsearch">
+    <input type="text" id="toolSearch" placeholder="🔍 What do you want to do with your PDF? (e.g. “make my PDF smaller”)" autocomplete="off">
+    <div class="searchhits" id="searchHits"></div>
+  </div>
+
   <div class="tabs" id="tabs">
+    <button data-t="compress">Compress PDF</button>
     <button data-t="merge" class="on">Merge PDF</button>
     <button data-t="split">Split / Extract</button>
+    <button data-t="delete">Delete pages</button>
     <button data-t="img2pdf">Images → PDF</button>
     <button data-t="pdf2img">PDF → JPG</button>
+    <button data-t="pdf2png">PDF → PNG</button>
     <button data-t="rotate">Rotate</button>
+    <button data-t="pagenum">Page numbers</button>
+    <button data-t="watermark">Watermark</button>
+    <button data-t="extract">Extract text</button>
   </div>
 
   <div class="card">
@@ -146,9 +170,41 @@
       <div><label>Quality</label>
         <select id="scale"><option value="1.5">Standard</option><option value="2" selected>High</option><option value="3">Very high</option></select></div>
     </div>
+    <div class="opts hidden" id="compressOpts">
+      <div><label>Compression level</label>
+        <select id="clevel">
+          <option value="strong">Strong — smallest file</option>
+          <option value="balanced" selected>Balanced — recommended</option>
+          <option value="light">Light — best quality</option>
+        </select></div>
+      <div style="font-size:12px;color:var(--soft);align-self:center">Rebuilds pages as compressed images. Text becomes non-selectable.</div>
+    </div>
+    <div class="opts hidden" id="deleteOpts">
+      <div><label>Pages to delete (e.g. 2, 5-7)</label>
+        <input type="text" id="delRanges" placeholder="2, 5-7" style="min-width:180px"></div>
+    </div>
+    <div class="opts hidden" id="pagenumOpts">
+      <div><label>Position</label>
+        <select id="pnPos">
+          <option value="bc" selected>Bottom center</option>
+          <option value="br">Bottom right</option>
+          <option value="bl">Bottom left</option>
+        </select></div>
+      <div><label>Start at</label>
+        <input type="number" id="pnStart" value="1" min="0" style="width:80px"></div>
+      <div><label>Format</label>
+        <select id="pnFmt"><option value="n">1</option><option value="n_of">1 / N</option><option value="page_n">Page 1</option></select></div>
+    </div>
+    <div class="opts hidden" id="watermarkOpts">
+      <div><label>Watermark text</label>
+        <input type="text" id="wmText" placeholder="CONFIDENTIAL" value="CONFIDENTIAL" style="min-width:180px"></div>
+      <div><label>Opacity</label>
+        <select id="wmOpacity"><option value="0.12">Light</option><option value="0.2" selected>Medium</option><option value="0.35">Strong</option></select></div>
+    </div>
 
     <button class="go" id="go" disabled>Add files to start</button>
     <div class="status" id="status"></div>
+    <div class="result hidden" id="result"></div>
   </div>
 
   <div class="adslot" data-ad="top">Advertisement</div>
@@ -156,6 +212,7 @@
   <section class="guides">
     <h2>How-to guides</h2>
     <div class="guidelinks">
+      <a href="/compress-pdf">Compress a PDF</a>
       <a href="/merge-pdf">Merge PDF files</a>
       <a href="/split-pdf">Split &amp; extract pages</a>
       <a href="/jpg-to-pdf">Convert JPG to PDF</a>
@@ -172,11 +229,13 @@
     <h2>Free browser-based PDF toolkit</h2>
     <p>Unlike most online PDF converters, meldpdf processes everything locally in your browser using WebAssembly. Your documents are never sent to a server, so it's safe for contracts, payslips, IDs and other sensitive files. No account, no email, no watermark, no file-size games.</p>
     <div class="cardsgrid">
+      <div class="mini"><b>Compress PDF</b>Shrink a PDF for email limits, with before/after sizes.</div>
       <div class="mini"><b>Merge PDF</b>Combine multiple PDFs into one, in any order.</div>
-      <div class="mini"><b>Split / Extract</b>Pull out specific pages or page ranges.</div>
-      <div class="mini"><b>Images → PDF</b>Turn JPG/PNG photos into a single PDF.</div>
-      <div class="mini"><b>PDF → JPG</b>Export each page as a high-quality image.</div>
-      <div class="mini"><b>Rotate</b>Fix sideways or upside-down pages.</div>
+      <div class="mini"><b>Split / Delete</b>Extract page ranges or remove pages you don't need.</div>
+      <div class="mini"><b>Images ↔ PDF</b>JPG/PNG to PDF, or export pages as JPG/PNG.</div>
+      <div class="mini"><b>Page numbers</b>Stamp numbers onto every page.</div>
+      <div class="mini"><b>Watermark</b>Add a diagonal text watermark.</div>
+      <div class="mini"><b>Extract text</b>Copy out text and count words &amp; characters.</div>
       <div class="mini"><b>100% private</b>Files stay on your device — always.</div>
     </div>
   </section>
@@ -220,15 +279,29 @@ function initAds(){
   });
 }
 
-const { PDFDocument, degrees } = PDFLib;
+const { PDFDocument, degrees, StandardFonts, rgb } = PDFLib;
+function showResult(html){const r=$('result');r.innerHTML=html;r.classList.remove('hidden');}
+async function renderPageToJpeg(page,scale,quality){
+  const vp=page.getViewport({scale});
+  const canvas=document.createElement('canvas');
+  canvas.width=Math.floor(vp.width); canvas.height=Math.floor(vp.height);
+  await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
+  return new Promise(r=>canvas.toBlob(b=>r(b),'image/jpeg',quality));
+}
 if (window['pdfjsLib']) pdfjsLib.GlobalWorkerOptions.workerSrc='/vendor/pdf.worker.min.js';
 
 const TOOLS={
-  merge:{title:'Merge PDF',desc:'Combine several PDFs into one. Drag to reorder.',accept:'application/pdf',hint:'PDF files',multi:true,btn:'Merge PDFs'},
-  split:{title:'Split / Extract pages',desc:'Extract specific pages or ranges from a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Extract pages'},
-  img2pdf:{title:'Images → PDF',desc:'Combine JPG/PNG images into a single PDF.',accept:'image/jpeg,image/png',hint:'JPG or PNG images',multi:true,btn:'Create PDF'},
-  pdf2img:{title:'PDF → JPG',desc:'Export every page of a PDF as a JPG image (zipped if multiple).',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to images'},
-  rotate:{title:'Rotate PDF',desc:'Rotate all pages of a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Rotate PDF'}
+  compress:{title:'Compress PDF',desc:'Shrink a PDF for email or upload limits — see the before/after size.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Compress PDF',opts:'compressOpts',kw:'compress reduce shrink smaller size make small mb optimize'},
+  merge:{title:'Merge PDF',desc:'Combine several PDFs into one. Drag to reorder.',accept:'application/pdf',hint:'PDF files',multi:true,btn:'Merge PDFs',kw:'merge combine join together'},
+  split:{title:'Split / Extract pages',desc:'Extract specific pages or ranges from a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Extract pages',opts:'splitOpts',kw:'split extract separate pull pages range'},
+  delete:{title:'Delete pages',desc:'Remove specific pages from a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Delete pages',opts:'deleteOpts',kw:'delete remove pages get rid'},
+  img2pdf:{title:'Images → PDF',desc:'Combine JPG/PNG images into a single PDF.',accept:'image/jpeg,image/png',hint:'JPG or PNG images',multi:true,btn:'Create PDF',kw:'image jpg jpeg png photo picture to pdf'},
+  pdf2img:{title:'PDF → JPG',desc:'Export every page of a PDF as a JPG image.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to JPG',opts:'pdf2imgOpts',kw:'pdf to jpg jpeg image convert export'},
+  pdf2png:{title:'PDF → PNG',desc:'Export every page of a PDF as a PNG image.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to PNG',opts:'pdf2imgOpts',kw:'pdf to png image convert export transparent'},
+  rotate:{title:'Rotate PDF',desc:'Rotate all pages of a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Rotate PDF',opts:'rotateOpts',kw:'rotate turn sideways upside down orientation landscape portrait'},
+  pagenum:{title:'Add page numbers',desc:'Stamp page numbers onto every page of a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Add page numbers',opts:'pagenumOpts',kw:'page numbers number pagination'},
+  watermark:{title:'Watermark PDF',desc:'Add a diagonal text watermark to every page.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Add watermark',opts:'watermarkOpts',kw:'watermark stamp confidential draft mark text overlay'},
+  extract:{title:'Extract text',desc:'Pull all text out of a PDF and count pages, words and characters.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Extract text',kw:'extract text copy word count character count read'}
 };
 let current='merge', files=[];
 
@@ -241,9 +314,9 @@ function setTool(t){
   const c=TOOLS[t];
   $('toolTitle').textContent=c.title; $('toolDesc').textContent=c.desc;
   $('accepthint').textContent=c.hint; $('picker').accept=c.accept; $('picker').multiple=c.multi;
-  $('splitOpts').classList.toggle('hidden',t!=='split');
-  $('rotateOpts').classList.toggle('hidden',t!=='rotate');
-  $('pdf2imgOpts').classList.toggle('hidden',t!=='pdf2img');
+  ['compressOpts','splitOpts','deleteOpts','rotateOpts','pdf2imgOpts','pagenumOpts','watermarkOpts']
+    .forEach(id=>$(id).classList.toggle('hidden',c.opts!==id));
+  $('result').classList.add('hidden');
   render(); setStatus('');
 }
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>setTool(b.dataset.t));
@@ -256,8 +329,14 @@ $('drop').addEventListener('drop',e=>addFiles(e.dataTransfer.files));
 
 function addFiles(list){
   const c=TOOLS[current];
-  const accepted=c.accept.split(',');
-  for(const f of list){ if(accepted.some(a=>f.type===a)){ if(!c.multi) files=[]; files.push(f);} }
+  const wantPdf=c.accept.includes('pdf');
+  const ok=f=>{
+    if(c.accept.split(',').includes(f.type)) return true;
+    // some browsers report an empty type; fall back to the extension
+    if(!f.type){ return wantPdf ? /\.pdf$/i.test(f.name) : /\.(jpe?g|png)$/i.test(f.name); }
+    return false;
+  };
+  for(const f of list){ if(ok(f)){ if(!c.multi) files=[]; files.push(f);} }
   render();
 }
 function move(i,d){const j=i+d; if(j<0||j>=files.length)return; [files[i],files[j]]=[files[j],files[i]]; render();}
@@ -294,7 +373,7 @@ function parseRanges(str,max){
 }
 
 $('go').onclick=async()=>{
-  $('go').disabled=true; setStatus('Working…');
+  $('go').disabled=true; setStatus('Working…'); $('result').classList.add('hidden');
   try{ await run(); }
   catch(err){ console.error(err); setStatus('Something went wrong: '+err.message,'err'); }
   finally{ $('go').disabled=files.length===0; }
@@ -338,7 +417,95 @@ async function run(){
     download(await src.save(),'rotated.pdf','application/pdf');
     setStatus('✓ Rotated all pages by '+a+'°.','ok');
   }
-  else if(current==='pdf2img'){
+  else if(current==='delete'){
+    const src=await PDFDocument.load(await files[0].arrayBuffer());
+    const total=src.getPageCount();
+    const del=new Set(parseRanges($('delRanges').value,total));
+    if(!del.size){setStatus('Enter valid page numbers to delete (e.g. 2, 5-7).','err');return;}
+    if(del.size>=total){setStatus('That would delete every page — nothing to save.','err');return;}
+    const keep=[]; for(let i=0;i<total;i++) if(!del.has(i)) keep.push(i);
+    const out=await PDFDocument.create();
+    const pages=await out.copyPages(src,keep); pages.forEach(p=>out.addPage(p));
+    download(await out.save(),'pages-deleted.pdf','application/pdf');
+    setStatus('✓ Deleted '+del.size+' page(s), kept '+keep.length+'.','ok');
+  }
+  else if(current==='pagenum'){
+    const src=await PDFDocument.load(await files[0].arrayBuffer());
+    const font=await src.embedFont(StandardFonts.Helvetica);
+    const pos=$('pnPos').value, fmt=$('pnFmt').value;
+    const start=parseInt($('pnStart').value)||0;
+    const pages=src.getPages(); const total=pages.length;
+    pages.forEach((p,i)=>{
+      const num=start+i;
+      const label = fmt==='n_of' ? num+' / '+(start+total-1) : fmt==='page_n' ? 'Page '+num : ''+num;
+      const size=11, w=font.widthOfTextAtSize(label,size), {width}=p.getSize();
+      const x = pos==='br'? width-w-36 : pos==='bl'? 36 : (width-w)/2;
+      p.drawText(label,{x,y:24,size,font,color:rgb(.25,.28,.35)});
+    });
+    download(await src.save(),'numbered.pdf','application/pdf');
+    setStatus('✓ Added page numbers to '+total+' page(s).','ok');
+  }
+  else if(current==='watermark'){
+    const text=($('wmText').value||'CONFIDENTIAL').trim();
+    const opacity=parseFloat($('wmOpacity').value);
+    const src=await PDFDocument.load(await files[0].arrayBuffer());
+    const font=await src.embedFont(StandardFonts.HelveticaBold);
+    src.getPages().forEach(p=>{
+      const {width,height}=p.getSize();
+      const size=Math.min(width,height)/ Math.max(6,text.length) * 1.6;
+      const w=font.widthOfTextAtSize(text,size);
+      p.drawText(text,{x:width/2 - w/2*Math.cos(Math.PI/4), y:height/2 - w/2*Math.sin(Math.PI/4),
+        size,font,color:rgb(.5,.5,.5),opacity,rotate:degrees(45)});
+    });
+    download(await src.save(),'watermarked.pdf','application/pdf');
+    setStatus('✓ Watermarked '+src.getPageCount()+' page(s).','ok');
+  }
+  else if(current==='extract'){
+    const data=await files[0].arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data}).promise;
+    let all='';
+    for(let n=1;n<=pdf.numPages;n++){
+      setStatus('Reading page '+n+' of '+pdf.numPages+'…');
+      const page=await pdf.getPage(n);
+      const tc=await page.getTextContent();
+      all += tc.items.map(it=>it.str).join(' ')+'\n\n';
+    }
+    const words=(all.trim().match(/\S+/g)||[]).length;
+    const chars=all.replace(/\s/g,'').length;
+    download(new Blob([all],{type:'text/plain'}),'extracted-text.txt','text/plain');
+    setStatus('✓ Extracted text from '+pdf.numPages+' page(s).','ok');
+    showResult(`<b>Done.</b> ${pdf.numPages} pages · ${words.toLocaleString()} words · ${chars.toLocaleString()} characters.`+
+      (words===0?'<br>No selectable text found — this looks like a scanned/image PDF (OCR needed).':''));
+  }
+  else if(current==='compress'){
+    const inBytes=await files[0].arrayBuffer();
+    const inSize=inBytes.byteLength;
+    const pdf=await pdfjsLib.getDocument({data:inBytes.slice(0)}).promise;
+    const preset={strong:{scale:1.0,q:0.5},balanced:{scale:1.5,q:0.72},light:{scale:2.0,q:0.85}}[$('clevel').value];
+    const out=await PDFDocument.create();
+    for(let n=1;n<=pdf.numPages;n++){
+      setStatus('Compressing page '+n+' of '+pdf.numPages+'…');
+      const page=await pdf.getPage(n);
+      const ptVp=page.getViewport({scale:1});
+      const blob=await renderPageToJpeg(page,preset.scale,preset.q);
+      const img=await out.embedJpg(await blob.arrayBuffer());
+      const pg=out.addPage([ptVp.width,ptVp.height]);
+      pg.drawImage(img,{x:0,y:0,width:ptVp.width,height:ptVp.height});
+    }
+    const outBytes=await out.save();
+    const outSize=outBytes.byteLength;
+    if(outSize>=inSize){
+      setStatus('This PDF is already well optimised — the compressed version isn\'t smaller, so the original is best.','err');
+      showResult(`Original: <b>${fmt(inSize)}</b> · Compressed attempt: ${fmt(outSize)} (no gain). Try a stronger level, or your file is mostly text and already small.`);
+      return;
+    }
+    download(outBytes,'compressed.pdf','application/pdf');
+    const pct=Math.round((1-outSize/inSize)*100);
+    setStatus('✓ Compressed successfully.','ok');
+    showResult(`Original: ${fmt(inSize)} → New: <b>${fmt(outSize)}</b> · <b>${pct}% smaller</b>.`);
+  }
+  else if(current==='pdf2img'||current==='pdf2png'){
+    const png = current==='pdf2png';
     const data=await files[0].arrayBuffer();
     const pdf=await pdfjsLib.getDocument({data}).promise;
     const scale=parseFloat($('scale').value);
@@ -349,12 +516,33 @@ async function run(){
       const canvas=document.createElement('canvas');
       canvas.width=vp.width; canvas.height=vp.height;
       await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
-      const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.92));
-      download(blob,`page-${n}.jpg`,'image/jpeg');
+      const type = png?'image/png':'image/jpeg';
+      const blob=await new Promise(r=>canvas.toBlob(r,type,0.92));
+      download(blob,`page-${n}.${png?'png':'jpg'}`,type);
     }
-    setStatus('✓ Exported '+pdf.numPages+' page(s) as JPG.','ok');
+    setStatus('✓ Exported '+pdf.numPages+' page(s) as '+(png?'PNG':'JPG')+'.','ok');
   }
 }
+// ---- Task search: map plain-language queries to tools ----
+const searchBox=$('toolSearch'), hits=$('searchHits');
+function searchTools(q){
+  q=q.toLowerCase().trim(); if(!q) return [];
+  return Object.entries(TOOLS).map(([t,c])=>{
+    const hay=(t+' '+c.title+' '+c.desc+' '+(c.kw||'')).toLowerCase();
+    let score=0; q.split(/\s+/).forEach(w=>{ if(w && hay.includes(w)) score += hay.indexOf(w)<40?2:1; });
+    return {t,c,score};
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,5);
+}
+searchBox.addEventListener('input',()=>{
+  const res=searchTools(searchBox.value);
+  hits.innerHTML=res.map(x=>`<button data-go="${x.t}">${x.c.title} — <span style="color:var(--soft)">${x.c.desc}</span></button>`).join('');
+});
+hits.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  location.hash=b.dataset.go; searchBox.value=''; hits.innerHTML=''; searchBox.blur();});
+searchBox.addEventListener('keydown',e=>{if(e.key==='Enter'){const r=searchTools(searchBox.value)[0];
+  if(r){location.hash=r.t;searchBox.value='';hits.innerHTML='';searchBox.blur();}}});
+document.addEventListener('click',e=>{if(!e.target.closest('.toolsearch'))hits.innerHTML='';});
+
 const validTool = t => Object.prototype.hasOwnProperty.call(TOOLS,t);
 const fromHash = () => { const h=location.hash.replace('#',''); return validTool(h)?h:'merge'; };
 setTool(fromHash());
