@@ -1,0 +1,46 @@
+name: Deploy to Cloudflare Pages
+
+# Auto-deploys the site to the `pdf-tools` Cloudflare Pages project
+# (production branch = master) on every push to master. Runs on a
+# GitHub-hosted runner — no self-hosted runner. Requires repo secret
+# CLOUDFLARE_API_TOKEN (scoped token with Pages:Edit). The account id is
+# not sensitive.
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Stage deployable files
+        run: |
+          mkdir -p _site
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            --exclude='README.md' \
+            --exclude='.gitignore' \
+            --exclude='cf-token.txt' \
+            --exclude='_site' \
+            ./ _site/
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: cdca29dee79e6b3d85a19651ab597894
+          command: pages deploy _site --project-name=pdf-tools --branch=master
