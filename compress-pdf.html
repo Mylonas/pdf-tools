@@ -31,17 +31,17 @@
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
-    <nav class="nav"><a href="/#compress">Tools</a><a href="/merge-pdf">Guides</a><a href="/privacy">Privacy</a></nav>
+    <nav class="nav"><a href="/">Tools</a><a href="/pdf-privacy">Privacy</a><a href="/about">About</a></nav>
   </div>
 
   <h1>Compress a PDF — without uploading it</h1>
   <p class="lead">Too big for a 5&nbsp;MB email limit or an upload cap? Shrink your PDF right here in your browser. No sign-up, no watermark, and the file never leaves your device.</p>
 
-  <p><a class="cta" href="/#compress">→ Open the Compress PDF tool</a></p>
+  <div id="pdfApp" data-tool="compress"></div>
 
   <h2>How to compress a PDF</h2>
   <ol class="steps">
-    <li><strong>Open the <a href="/#compress">Compress PDF</a> tool</strong> and drop your PDF in (or click to choose it).</li>
+    <li><strong>Open the <a href="/compress-pdf">Compress PDF</a> tool</strong> and drop your PDF in (or click to choose it).</li>
     <li><strong>Pick a level.</strong> <em>Strong</em> gives the smallest file, <em>Balanced</em> is the sweet spot, <em>Light</em> keeps the most quality.</li>
     <li><strong>Download.</strong> You'll see the original size, the new size, and the percentage saved.</li>
   </ol>
@@ -52,7 +52,7 @@
   <p>Most oversized PDFs are heavy because of <strong>images and scans</strong>. This tool re-renders each page as a compressed JPEG at a lower resolution and rebuilds the PDF, which is what shrinks the file. The trade-off: the result is image-based, so text is no longer selectable and OCR is lost. For documents you only need to <em>read, email or upload</em>, that's usually a perfect trade.</p>
 
   <h2>When to use a different approach</h2>
-  <p>If you need selectable text, form fields, or a fully searchable document, don't compress to images — re-export from the original source at 150–200&nbsp;DPI instead. Only need part of the document? <a href="/#delete">Delete the pages you don't need</a> first to save even more.</p>
+  <p>If you need selectable text, form fields, or a fully searchable document, don't compress to images — re-export from the original source at 150–200&nbsp;DPI instead. Only need part of the document? <a href="/delete-pages-from-pdf">Delete the pages you don't need</a> first to save even more.</p>
 
   <h2>Frequently asked questions</h2>
   <details><summary>Is my PDF uploaded to a server?</summary><p>No. Compression runs entirely in your browser. See our <a href="/privacy">privacy policy</a>.</p></details>
@@ -60,13 +60,16 @@
   <details><summary>Will the text still be selectable?</summary><p>No — pages become compressed images. If you need selectable text, re-export from the source at a lower DPI.</p></details>
 
   <div class="related">
-    <a href="/#compress">Compress PDF</a>
-    <a href="/reduce-pdf-size">Reduce PDF size (guide)</a>
-    <a href="/#delete">Delete pages</a>
-    <a href="/#merge">Merge PDF</a>
+    <a href="/compress-pdf">Compress PDF</a>
+    
+    <a href="/delete-pages-from-pdf">Delete pages</a>
+    <a href="/merge-pdf">Merge PDF</a>
     <a href="/is-it-safe-to-upload-pdf">Is uploading PDFs safe?</a>
   </div>
   <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a></footer>
 </div>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/pdf.min.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Work with PDFs Privately (No Upload) — meldpdf</title>
+<meta name="description" content="How meldpdf processes PDFs entirely in your browser, whether file bytes are sent to a server, and how in-browser tools compare with upload-based PDF sites.">
+<link rel="canonical" href="https://meldpdf.com/pdf-privacy">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233355ff'/%3E%3Crect x='9' y='7' width='14' height='18' rx='2' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css">
+<script src="/theme.js"></script>
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="How to work with PDFs privately (no upload)">
+<meta property="og:description" content="How meldpdf processes PDFs entirely in your browser — and how that compares with upload-based PDF sites.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://meldpdf.com/pdf-privacy">
+<meta property="og:image" content="https://meldpdf.com/og-image.svg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Article","headline":"How to work with PDFs privately, without uploading them","description":"How meldpdf processes PDFs entirely in your browser, whether file bytes are sent to a server, and how in-browser tools compare with upload-based PDF sites.","url":"https://meldpdf.com/pdf-privacy","dateModified":"2026-08-11","publisher":{"@type":"Organization","name":"meldpdf","url":"https://meldpdf.com/"}},
+{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"meldpdf","item":"https://meldpdf.com/"},{"@type":"ListItem","position":2,"name":"PDF privacy","item":"https://meldpdf.com/pdf-privacy"}]},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Can PDF files be processed without uploading them?","acceptedAnswer":{"@type":"Answer","text":"Yes. Modern browsers can read and rewrite PDF files locally using JavaScript and WebAssembly, so a PDF can be merged, split, compressed, signed or converted without the file ever being sent to a server. meldpdf works this way."}},
+{"@type":"Question","name":"Can I convert a PDF without uploading it?","acceptedAnswer":{"@type":"Answer","text":"Yes. On meldpdf, conversions such as PDF to JPG/PNG, images to PDF and PDF to Word run in your browser. The file's bytes are never transmitted; only the finished result is saved to your device."}},
+{"@type":"Question","name":"Is it safe to upload a PDF to an online tool?","acceptedAnswer":{"@type":"Answer","text":"Uploading sends a copy of your document to someone else's server, where it may be stored or logged. For sensitive files, prefer a tool that processes the PDF in your browser so it never leaves your device."}}
+]}
+]}
+</script>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
+    <nav class="nav"><a href="/">Tools</a><a href="/pdf-privacy">Privacy</a><a href="/about">About</a></nav>
+  </div>
+
+  <h1>How to work with PDFs privately, without uploading them</h1>
+  <p class="lead">PDFs often hold sensitive things — contracts, payslips, IDs, bank statements. This page explains, factually, how meldpdf processes your files, what leaves your device and what doesn't, and how that compares with PDF sites that upload.</p>
+
+  <div class="priv">🔒 Short answer: your PDF is processed in your browser and its contents are never uploaded to meldpdf.</div>
+
+  <h2>Can a PDF be edited without uploading it?</h2>
+  <p><strong>Yes.</strong> Modern browsers can open, read and rewrite a PDF entirely on your own computer using JavaScript and WebAssembly. meldpdf uses two well-known open-source libraries — <a href="https://pdf-lib.js.org/">pdf-lib</a> to build and modify PDFs and <a href="https://mozilla.github.io/pdf.js/">PDF.js</a> to render pages — both running inside the browser tab. When you merge, split, compress or sign a file, the work happens on your device and only the finished result is saved via your normal download.</p>
+
+  <h2>What leaves your device — and what doesn't</h2>
+  <p>The bytes of your PDF are <strong>not</strong> sent to meldpdf's servers. There is no upload step, no account, and no copy kept. Two tools are worth calling out precisely, because honesty matters here:</p>
+  <ul>
+    <li><strong>Fully local (nothing but the page loads from the network):</strong> Compress, Merge, Split, Delete pages, Organize, Rotate, Images&nbsp;→&nbsp;PDF, PDF&nbsp;→&nbsp;JPG, PDF&nbsp;→&nbsp;PNG, Page numbers, Watermark, Sign, Extract text, PDF&nbsp;→&nbsp;Word and Metadata removal.</li>
+    <li><strong>Local processing, one-time engine download:</strong> <a href="/ocr-pdf">OCR</a> and <a href="/protect-pdf">Password protect / unlock</a> download their processing engine (tesseract.js for OCR, qpdf compiled to WebAssembly for encryption) from a public CDN the first time you use them. Even then, <em>your document is still processed on your device</em> — only the engine is fetched, never your file.</li>
+  </ul>
+
+  <h2>What meldpdf can and cannot access</h2>
+  <p>meldpdf can access a file only after <em>you</em> choose it or drop it into a tool, and only within that browser tab. It cannot see your other files, your other tabs, or anything after you close the page. There is no server-side storage of your documents because your documents are never sent to a server.</p>
+
+  <h2>In-browser tools vs upload-based PDF sites</h2>
+  <p>Most popular PDF websites upload your file to their servers, process it there, and let you download the result. That's convenient and works well for non-sensitive files, but it means a copy of your document sits on someone else's infrastructure — subject to their retention, logging and security. A browser-based tool avoids that entire class of risk for anything it can do locally, which is why meldpdf is a good fit for contracts, payslips, IDs and bank statements.</p>
+
+  <h2>Security considerations</h2>
+  <ul>
+    <li>Adding a password uses <strong>256-bit AES</strong> encryption — strong, but only as good as the password you choose. Share the password through a separate channel from the file.</li>
+    <li>meldpdf <strong>cannot remove a password you don't know</strong>. Unlocking requires the correct current password; we do not crack or bypass encryption.</li>
+    <li>Before sending a document onward, consider <a href="/remove-pdf-metadata">removing its metadata</a> — PDFs can carry your name, software and dates.</li>
+  </ul>
+
+  <div class="adslot" data-ad="pillar">Advertisement</div>
+
+  <h2>Every meldpdf tool, and what it does</h2>
+  <div class="related">
+    <a href="/compress-pdf">Compress a PDF privately</a>
+    <a href="/merge-pdf">Merge PDFs in your browser</a>
+    <a href="/split-pdf">Split &amp; extract pages</a>
+    <a href="/delete-pages-from-pdf">Delete pages</a>
+    <a href="/organize-pdf">Organize / reorder pages</a>
+    <a href="/rotate-pdf">Rotate a PDF</a>
+    <a href="/jpg-to-pdf">Images to PDF</a>
+    <a href="/pdf-to-jpg">PDF to JPG</a>
+    <a href="/pdf-to-png">PDF to PNG</a>
+    <a href="/add-page-numbers-to-pdf">Add page numbers</a>
+    <a href="/watermark-pdf">Watermark a PDF</a>
+    <a href="/sign-pdf">Sign a PDF without an account</a>
+    <a href="/extract-text-from-pdf">Extract text</a>
+    <a href="/pdf-to-word">PDF to Word</a>
+    <a href="/remove-pdf-metadata">Remove metadata</a>
+    <a href="/ocr-pdf">OCR a scanned PDF</a>
+    <a href="/protect-pdf">Password protect / unlock</a>
+  </div>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>Can PDF files be processed without uploading them?</summary><p>Yes — browsers can read and rewrite PDFs locally with JavaScript and WebAssembly, so the file never has to be sent to a server. meldpdf works this way.</p></details>
+  <details><summary>Can I convert a PDF without uploading it?</summary><p>Yes. Conversions like PDF to JPG/PNG, images to PDF and PDF to Word run in your browser; only the finished result is saved to your device.</p></details>
+  <details><summary>Is it safe to upload a PDF to an online tool?</summary><p>Uploading sends a copy to someone else's server, where it may be stored or logged. For sensitive documents, prefer an in-browser tool. See <a href="/is-it-safe-to-upload-pdf">is it safe to upload PDFs?</a></p></details>
+
+  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 11 August 2026.</p>
+  <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a> · <a href="/about">About</a></footer>
+</div>
+</body>
+</html>

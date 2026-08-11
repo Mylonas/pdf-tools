@@ -27,17 +27,17 @@
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
-    <nav class="nav"><a href="/#merge">Tools</a><a href="/merge-pdf">Guides</a><a href="/privacy">Privacy</a></nav>
+    <nav class="nav"><a href="/">Tools</a><a href="/pdf-privacy">Privacy</a><a href="/about">About</a></nav>
   </div>
 
   <h1>How to merge PDF files into one</h1>
   <p class="lead">Combine two or more PDFs into a single document — free, no sign-up, and completely private.</p>
   <div class="priv">🔒 Your files are merged inside your browser and never uploaded.</div>
-  <a class="cta" href="/#merge">Open the Merge tool →</a>
+  <div id="pdfApp" data-tool="merge"></div>
 
   <h2>Step by step</h2>
   <ol class="steps">
-    <li>Open the <a href="/#merge">Merge PDF tool</a> and drop in the files you want to combine, or click to browse.</li>
+    <li>Open the <a href="/merge-pdf">Merge PDF tool</a> and drop in the files you want to combine, or click to browse.</li>
     <li>Drag the files up or down to set the order they should appear in the final document.</li>
     <li>Remove any file you added by mistake with the ✕ button.</li>
     <li>Click <strong>Merge PDFs</strong>. The combined file downloads instantly as <em>merged.pdf</em>.</li>
@@ -62,7 +62,7 @@
   <details><summary>Do you keep a copy of my files?</summary><p>No. We have no server that receives your files — everything stays in your browser. See our <a href="/privacy">privacy policy</a>.</p></details>
 
   <div class="related">
-    <a href="/#split">Split a PDF</a>
+    <a href="/split-pdf">Split a PDF</a>
     <a href="/rotate-pdf">Rotate a PDF</a>
     <a href="/jpg-to-pdf">JPG to PDF</a>
     <a href="/pdf-to-jpg">PDF to JPG</a>
@@ -70,5 +70,8 @@
 
   <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a></footer>
 </div>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/pdf.min.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

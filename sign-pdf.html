@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sign a PDF Online — Free & Private — meldpdf</title>
-<meta name="description" content="Add your signature to a PDF for free. Draw it or upload an image, place it on any page, and download — all in your browser. No sign-up, and your file is never uploaded.">
+<meta name="description" content="Add your signature to a PDF free — draw it or upload an image, place it on any page, download. In your browser; never uploaded.">
 <link rel="canonical" href="https://meldpdf.com/sign-pdf">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233355ff'/%3E%3Crect x='9' y='7' width='14' height='18' rx='2' fill='white'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/style.css">
@@ -31,17 +31,17 @@
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
-    <nav class="nav"><a href="/#sign">Tools</a><a href="/merge-pdf">Guides</a><a href="/privacy">Privacy</a></nav>
+    <nav class="nav"><a href="/">Tools</a><a href="/pdf-privacy">Privacy</a><a href="/about">About</a></nav>
   </div>
 
   <h1>Sign a PDF — without uploading it</h1>
   <p class="lead">Add your signature to a contract, form or letter right in your browser. Draw it or upload an image, drop it on the page, and download. No account, no watermark, and the file never leaves your device.</p>
 
-  <p><a class="cta" href="/#sign">→ Open the Sign PDF tool</a></p>
+  <div id="pdfApp" data-tool="sign"></div>
 
   <h2>How to sign a PDF</h2>
   <ol class="steps">
-    <li><strong>Open the <a href="/#sign">Sign PDF</a> tool</strong> and add your PDF.</li>
+    <li><strong>Open the <a href="/sign-pdf">Sign PDF</a> tool</strong> and add your PDF.</li>
     <li><strong>Create your signature.</strong> Draw it with a mouse, trackpad or finger — or upload a PNG/JPG of a signature you already have.</li>
     <li><strong>Choose where it goes:</strong> first page, last page or all pages, and which corner.</li>
     <li><strong>Download</strong> the signed PDF.</li>
@@ -61,13 +61,16 @@
   <details><summary>Is it legally binding?</summary><p>An electronic signature is widely accepted for everyday use; certified digital signatures need a qualified provider.</p></details>
 
   <div class="related">
-    <a href="/#sign">Sign PDF</a>
-    <a href="/#pagenum">Add page numbers</a>
-    <a href="/#watermark">Watermark</a>
+    <a href="/sign-pdf">Sign PDF</a>
+    <a href="/add-page-numbers-to-pdf">Add page numbers</a>
+    <a href="/watermark-pdf">Watermark</a>
     <a href="/protect-pdf">Protect PDF</a>
     <a href="/merge-pdf">Merge PDF</a>
   </div>
   <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a></footer>
 </div>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/pdf.min.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

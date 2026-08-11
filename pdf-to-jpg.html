@@ -27,17 +27,17 @@
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
-    <nav class="nav"><a href="/#merge">Tools</a><a href="/merge-pdf">Guides</a><a href="/privacy">Privacy</a></nav>
+    <nav class="nav"><a href="/">Tools</a><a href="/pdf-privacy">Privacy</a><a href="/about">About</a></nav>
   </div>
 
   <h1>How to convert a PDF to JPG images</h1>
   <p class="lead">Turn each page of a PDF into a high-quality JPG you can share, post or edit.</p>
   <div class="priv">🔒 Pages are rendered in your browser — your PDF is never uploaded.</div>
-  <a class="cta" href="/#pdf2img">Open the PDF → JPG tool →</a>
+  <div id="pdfApp" data-tool="pdf2img"></div>
 
   <h2>Step by step</h2>
   <ol class="steps">
-    <li>Open the <a href="/#pdf2img">PDF → JPG tool</a> and add your PDF.</li>
+    <li>Open the <a href="/pdf-to-jpg">PDF → JPG tool</a> and add your PDF.</li>
     <li>Pick a quality: <strong>Standard</strong>, <strong>High</strong> or <strong>Very high</strong> (higher quality means larger images).</li>
     <li>Click <strong>Convert to images</strong>. Each page downloads as <em>page-1.jpg</em>, <em>page-2.jpg</em>, and so on.</li>
   </ol>
@@ -61,7 +61,7 @@
   <details><summary>Is my PDF uploaded?</summary><p>No. Rendering runs locally in your browser with PDF.js. See our <a href="/privacy">privacy policy</a>.</p></details>
 
   <div class="related">
-    <a href="/#img2pdf">JPG to PDF</a>
+    <a href="/jpg-to-pdf">JPG to PDF</a>
     <a href="/merge-pdf">Merge PDFs</a>
     <a href="/split-pdf">Split a PDF</a>
     <a href="/rotate-pdf">Rotate a PDF</a>
@@ -69,5 +69,8 @@
 
   <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a></footer>
 </div>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/pdf.min.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>
