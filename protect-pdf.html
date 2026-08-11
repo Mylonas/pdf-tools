@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Password Protect a PDF — Free & Private — meldpdf</title>
-<meta name="description" content="Add a password to a PDF, or remove one you know — free, in your browser, with strong 256-bit AES encryption. Your file is never uploaded. We can't crack locked PDFs.">
+<meta name="description" content="Add a password to a PDF, or remove one you know — free, in your browser, with 256-bit AES. Your file is never uploaded.">
 <link rel="canonical" href="https://meldpdf.com/protect-pdf">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233355ff'/%3E%3Crect x='9' y='7' width='14' height='18' rx='2' fill='white'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/style.css">
@@ -31,17 +31,17 @@
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
-    <nav class="nav"><a href="/#protect">Tools</a><a href="/merge-pdf">Guides</a><a href="/privacy">Privacy</a></nav>
+    <nav class="nav"><a href="/">Tools</a><a href="/pdf-privacy">Privacy</a><a href="/about">About</a></nav>
   </div>
 
   <h1>Password protect a PDF — privately</h1>
   <p class="lead">Add a password to a sensitive PDF, or remove one you already know. It uses strong 256-bit AES encryption and runs in your browser — your file is never uploaded.</p>
 
-  <p><a class="cta" href="/#protect">→ Open the Protect / Unlock tool</a></p>
+  <div id="pdfApp" data-tool="protect"></div>
 
   <h2>How to add a password</h2>
   <ol class="steps">
-    <li><strong>Open the <a href="/#protect">Protect / Unlock</a> tool</strong> and add your PDF.</li>
+    <li><strong>Open the <a href="/protect-pdf">Protect / Unlock</a> tool</strong> and add your PDF.</li>
     <li><strong>Choose “Add a password”</strong> and type the password you want.</li>
     <li><strong>Apply.</strong> The engine encrypts the file on your device (it downloads once on first use).</li>
     <li><strong>Download</strong> the protected PDF and store the password somewhere safe.</li>
@@ -64,12 +64,15 @@
   <details><summary>How strong is it?</summary><p>256-bit AES, the strongest standard PDF encryption.</p></details>
 
   <div class="related">
-    <a href="/#protect">Protect / Unlock PDF</a>
-    <a href="/#metadata">Remove metadata</a>
+    <a href="/protect-pdf">Protect / Unlock PDF</a>
+    <a href="/remove-pdf-metadata">Remove metadata</a>
     <a href="/sign-pdf">Sign PDF</a>
     <a href="/is-it-safe-to-upload-pdf">Is uploading PDFs safe?</a>
   </div>
   <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a></footer>
 </div>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/pdf.min.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

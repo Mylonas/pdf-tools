@@ -27,17 +27,17 @@
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
-    <nav class="nav"><a href="/#merge">Tools</a><a href="/merge-pdf">Guides</a><a href="/privacy">Privacy</a></nav>
+    <nav class="nav"><a href="/">Tools</a><a href="/pdf-privacy">Privacy</a><a href="/about">About</a></nav>
   </div>
 
   <h1>How to convert JPG and PNG images to PDF</h1>
   <p class="lead">Combine one or many photos or screenshots into a single, tidy PDF document.</p>
   <div class="priv">🔒 Images become a PDF inside your browser — nothing is uploaded.</div>
-  <a class="cta" href="/#img2pdf">Open the Images → PDF tool →</a>
+  <div id="pdfApp" data-tool="img2pdf"></div>
 
   <h2>Step by step</h2>
   <ol class="steps">
-    <li>Open the <a href="/#img2pdf">Images → PDF tool</a> and add your JPG or PNG files.</li>
+    <li>Open the <a href="/jpg-to-pdf">Images → PDF tool</a> and add your JPG or PNG files.</li>
     <li>Drag the images into the order you want the pages to appear.</li>
     <li>Click <strong>Create PDF</strong>. Each image becomes one page, sized to the image, and downloads as <em>images.pdf</em>.</li>
   </ol>
@@ -61,7 +61,7 @@
   <details><summary>Do my images get uploaded?</summary><p>No. Conversion runs locally in your browser. See our <a href="/privacy">privacy policy</a>.</p></details>
 
   <div class="related">
-    <a href="/#pdf2img">PDF to JPG</a>
+    <a href="/pdf-to-jpg">PDF to JPG</a>
     <a href="/merge-pdf">Merge PDFs</a>
     <a href="/split-pdf">Split a PDF</a>
     <a href="/rotate-pdf">Rotate a PDF</a>
@@ -69,5 +69,8 @@
 
   <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a></footer>
 </div>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/pdf.min.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

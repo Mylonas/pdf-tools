@@ -27,17 +27,17 @@
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
-    <nav class="nav"><a href="/#merge">Tools</a><a href="/merge-pdf">Guides</a><a href="/privacy">Privacy</a></nav>
+    <nav class="nav"><a href="/">Tools</a><a href="/pdf-privacy">Privacy</a><a href="/about">About</a></nav>
   </div>
 
   <h1>How to split a PDF and extract pages</h1>
   <p class="lead">Pull out a single page or a range of pages from any PDF and save them as a new file.</p>
   <div class="priv">🔒 Pages are extracted in your browser — your PDF is never uploaded.</div>
-  <a class="cta" href="/#split">Open the Split tool →</a>
+  <div id="pdfApp" data-tool="split"></div>
 
   <h2>Step by step</h2>
   <ol class="steps">
-    <li>Open the <a href="/#split">Split / Extract tool</a> and add your PDF.</li>
+    <li>Open the <a href="/split-pdf">Split / Extract tool</a> and add your PDF.</li>
     <li>Type the pages you want in the box — for example <strong>1-3, 5, 8-10</strong>. Use hyphens for ranges and commas to separate.</li>
     <li>Click <strong>Extract pages</strong>. A new PDF containing only those pages downloads as <em>extracted.pdf</em>.</li>
   </ol>
@@ -61,7 +61,7 @@
   <details><summary>Are my pages uploaded anywhere?</summary><p>Never. Extraction happens locally in your browser. See the <a href="/privacy">privacy policy</a>.</p></details>
 
   <div class="related">
-    <a href="/#merge">Merge PDFs</a>
+    <a href="/merge-pdf">Merge PDFs</a>
     <a href="/rotate-pdf">Rotate a PDF</a>
     <a href="/pdf-to-jpg">PDF to JPG</a>
     <a href="/jpg-to-pdf">JPG to PDF</a>
@@ -69,5 +69,8 @@
 
   <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a></footer>
 </div>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/pdf.min.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PDF to Word — Free, Private, In Your Browser — meldpdf</title>
-<meta name="description" content="Convert a PDF's text into an editable Word (.doc) document for free. Runs in your browser — no upload, no sign-up. Best for text PDFs; scanned files can be run through OCR first.">
+<meta name="description" content="Convert a PDF's text into an editable Word (.doc) — free, in your browser, no upload. Best for text PDFs; run scans through OCR first.">
 <link rel="canonical" href="https://meldpdf.com/pdf-to-word">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233355ff'/%3E%3Crect x='9' y='7' width='14' height='18' rx='2' fill='white'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/style.css">
@@ -30,17 +30,17 @@
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
-    <nav class="nav"><a href="/#pdf2word">Tools</a><a href="/merge-pdf">Guides</a><a href="/privacy">Privacy</a></nav>
+    <nav class="nav"><a href="/">Tools</a><a href="/pdf-privacy">Privacy</a><a href="/about">About</a></nav>
   </div>
 
   <h1>PDF to Word — free and private</h1>
   <p class="lead">Get the text out of a PDF and into an editable Word document. It runs in your browser, so there's no upload, no sign-up and no watermark.</p>
 
-  <p><a class="cta" href="/#pdf2word">→ Open the PDF to Word tool</a></p>
+  <div id="pdfApp" data-tool="pdf2word"></div>
 
   <h2>How to convert a PDF to Word</h2>
   <ol class="steps">
-    <li><strong>Open the <a href="/#pdf2word">PDF → Word</a> tool</strong> and add your PDF.</li>
+    <li><strong>Open the <a href="/pdf-to-word">PDF → Word</a> tool</strong> and add your PDF.</li>
     <li><strong>Convert.</strong> The text is extracted and packaged as a <code>.doc</code> file.</li>
     <li><strong>Download and open</strong> it in Microsoft Word, Google Docs or LibreOffice, then edit freely.</li>
   </ol>
@@ -51,20 +51,23 @@
   <p>Fully accurate PDF-to-Word conversion that rebuilds every column, table and image is a heavy, server-side job. meldpdf takes a different, privacy-first approach: it pulls out the <strong>text</strong> so you can edit it, without ever sending your file anywhere. For letters, reports and mostly-text documents, that's exactly what people need. If you rely on the original visual layout being reproduced pixel-for-pixel, a desktop office suite is a better fit.</p>
 
   <h2>Converting a scanned PDF</h2>
-  <p>If your PDF is a scan (a picture of a page), there's no text to extract and you'll get a blank document. Run it through <a href="/#ocr">OCR</a> first to generate the text, then convert.</p>
+  <p>If your PDF is a scan (a picture of a page), there's no text to extract and you'll get a blank document. Run it through <a href="/ocr-pdf">OCR</a> first to generate the text, then convert.</p>
 
   <h2>Frequently asked questions</h2>
   <details><summary>Is my PDF uploaded?</summary><p>No — the text is extracted and the Word file built in your browser. See our <a href="/privacy">privacy policy</a>.</p></details>
   <details><summary>Will the layout be preserved exactly?</summary><p>The text is kept and made editable; complex layouts, columns and images are not reproduced.</p></details>
-  <details><summary>I got a blank document — why?</summary><p>Your PDF is scanned. Run <a href="/#ocr">OCR</a> first, then convert.</p></details>
+  <details><summary>I got a blank document — why?</summary><p>Your PDF is scanned. Run <a href="/ocr-pdf">OCR</a> first, then convert.</p></details>
 
   <div class="related">
-    <a href="/#pdf2word">PDF to Word</a>
-    <a href="/#extract">Extract text</a>
+    <a href="/pdf-to-word">PDF to Word</a>
+    <a href="/extract-text-from-pdf">Extract text</a>
     <a href="/ocr-pdf">OCR a scanned PDF</a>
     <a href="/compress-pdf">Compress PDF</a>
   </div>
   <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a></footer>
 </div>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/pdf.min.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+# Canonicalise host: www -> apex
+https://www.meldpdf.com/* https://meldpdf.com/:splat 301!
+# Consolidate the duplicate-intent page into the transactional Compress page
+/reduce-pdf-size /compress-pdf 301
+/reduce-pdf-size.html /compress-pdf 301
