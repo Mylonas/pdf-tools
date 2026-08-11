@@ -27,17 +27,17 @@
 <div class="wrap">
   <div class="topbar">
     <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
-    <nav class="nav"><a href="/#merge">Tools</a><a href="/merge-pdf">Guides</a><a href="/privacy">Privacy</a></nav>
+    <nav class="nav"><a href="/">Tools</a><a href="/pdf-privacy">Privacy</a><a href="/about">About</a></nav>
   </div>
 
   <h1>How to rotate a PDF and keep it that way</h1>
   <p class="lead">Fix sideways or upside-down scans and save a permanently rotated PDF.</p>
   <div class="priv">🔒 Rotation is applied in your browser — your PDF is never uploaded.</div>
-  <a class="cta" href="/#rotate">Open the Rotate tool →</a>
+  <div id="pdfApp" data-tool="rotate"></div>
 
   <h2>Step by step</h2>
   <ol class="steps">
-    <li>Open the <a href="/#rotate">Rotate tool</a> and add your PDF.</li>
+    <li>Open the <a href="/rotate-pdf">Rotate tool</a> and add your PDF.</li>
     <li>Choose how far to turn it: <strong>90° right</strong>, <strong>180°</strong>, or <strong>90° left</strong>.</li>
     <li>Click <strong>Rotate PDF</strong>. Every page turns and the result downloads as <em>rotated.pdf</em>.</li>
   </ol>
@@ -55,12 +55,12 @@
   </ul>
 
   <h2>Frequently asked questions</h2>
-  <details><summary>Can I rotate only some pages?</summary><p>The tool currently rotates all pages together. To rotate just a few, first <a href="/#split">extract those pages</a>, rotate them, then <a href="/#merge">merge</a> them back in.</p></details>
+  <details><summary>Can I rotate only some pages?</summary><p>The tool currently rotates all pages together. To rotate just a few, first <a href="/split-pdf">extract those pages</a>, rotate them, then <a href="/merge-pdf">merge</a> them back in.</p></details>
   <details><summary>Does rotating reduce quality?</summary><p>No. Rotation only changes page orientation metadata; text and images are untouched.</p></details>
   <details><summary>Is my file uploaded?</summary><p>No. Everything happens locally in your browser. See our <a href="/privacy">privacy policy</a>.</p></details>
 
   <div class="related">
-    <a href="/#merge">Merge PDFs</a>
+    <a href="/merge-pdf">Merge PDFs</a>
     <a href="/split-pdf">Split a PDF</a>
     <a href="/pdf-to-jpg">PDF to JPG</a>
     <a href="/jpg-to-pdf">JPG to PDF</a>
@@ -68,5 +68,8 @@
 
   <footer><a href="/">meldpdf</a> · Files never leave your browser · <a href="/privacy">Privacy</a></footer>
 </div>
+<script src="/vendor/pdf-lib.min.js"></script>
+<script src="/vendor/pdf.min.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>
