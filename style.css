@@ -1,11 +1,12 @@
 :root{
-  --bg:#eef1f6; --ink:#101725; --soft:#5a6577; --line:#d6dbe6; --card:#ffffff;
-  --brand:#3355ff; --brand-soft:#e6ebff;
+  /* Dark by default (white text). Toggle to light via the nav button. */
+  --bg:#0c0f16; --ink:#e7eaf1; --soft:#98a2b4; --line:#232a38; --card:#141924;
+  --brand:#6d86ff; --brand-soft:#182142;
   --sans:"Helvetica Neue",Arial,system-ui,sans-serif;
 }
-@media (prefers-color-scheme:dark){
-  :root{--bg:#0c0f16;--ink:#e7eaf1;--soft:#98a2b4;--line:#232a38;--card:#141924;
-    --brand:#6d86ff;--brand-soft:#182142;}
+:root[data-theme="light"]{
+  --bg:#eef1f6; --ink:#101725; --soft:#5a6577; --line:#d6dbe6; --card:#ffffff;
+  --brand:#3355ff; --brand-soft:#e6ebff;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65}
