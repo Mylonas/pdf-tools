@@ -37,6 +37,11 @@ li{margin:.35em 0}
   font-size:13px;font-weight:700;padding:6px 12px;border-radius:20px;margin:6px 0 18px}
 details{border:1px solid var(--line);border-radius:9px;padding:2px 14px;margin:8px 0;background:var(--card)}
 summary{cursor:pointer;font-weight:700;padding:10px 0}
+/* Breadcrumb navigation (matches the BreadcrumbList schema on each page) */
+.crumbs{font-size:13px;color:var(--soft);margin:-2px 0 14px}
+.crumbs a{color:var(--soft);text-decoration:none}
+.crumbs a:hover{color:var(--brand)}
+.crumbs span[aria-current]{color:var(--ink);font-weight:600}
 /* Reserve space for the JS-mounted tool so content below doesn't shift (CLS) */
 #pdfApp{min-height:360px}
 /* Ad placeholders stay hidden until AdSense is approved and activated */
