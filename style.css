@@ -37,7 +37,10 @@ li{margin:.35em 0}
   font-size:13px;font-weight:700;padding:6px 12px;border-radius:20px;margin:6px 0 18px}
 details{border:1px solid var(--line);border-radius:9px;padding:2px 14px;margin:8px 0;background:var(--card)}
 summary{cursor:pointer;font-weight:700;padding:10px 0}
-.adslot{margin:26px 0;min-height:90px;display:flex;align-items:center;justify-content:center;
+/* Reserve space for the JS-mounted tool so content below doesn't shift (CLS) */
+#pdfApp{min-height:360px}
+/* Ad placeholders stay hidden until AdSense is approved and activated */
+.adslot{display:none;margin:26px 0;min-height:90px;align-items:center;justify-content:center;
   border:1px dashed var(--line);border-radius:10px;color:var(--soft);font-size:12px;background:var(--card)}
 .related{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px}
 .related a{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:8px 14px;

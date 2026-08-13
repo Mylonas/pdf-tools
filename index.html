@@ -121,7 +121,8 @@
   .nav{display:flex;gap:16px;font-size:14px}
   .nav a{color:var(--soft);text-decoration:none;font-weight:600}
   .nav a:hover{color:var(--brand)}
-  .adslot{margin:22px 0;min-height:90px;display:flex;align-items:center;justify-content:center;
+  #pdfApp{min-height:520px}
+  .adslot{display:none;margin:22px 0;min-height:90px;align-items:center;justify-content:center;
     border:1px dashed var(--line);border-radius:10px;color:var(--soft);font-size:12px;background:var(--card)}
   .adslot[data-live="1"]{border:0;min-height:0;background:transparent}
   .guides{margin-top:36px}
@@ -203,14 +204,14 @@
     <a href="/about">About</a> ·
     <a href="/contact">Contact</a> ·
     <a href="/pdf-privacy">How it stays private</a> ·
-    <a href="/privacy">Privacy Policy</a><br>
+    <a href="/privacy">Privacy</a> ·
+    <a href="/cookie-policy">Cookies</a> ·
+    <a href="/terms">Terms</a><br>
     Runs entirely in your browser · pdf-lib &amp; PDF.js · no files uploaded<br>
     © <span id="yr"></span> meldpdf
   </footer>
 </div>
 
-<script src="/vendor/pdf-lib.min.js"></script>
-<script src="/vendor/pdf.min.js"></script>
-<script src="/app.js"></script>
+<script defer src="/app.js"></script>
 </body>
 </html>

@@ -153,8 +153,8 @@ function render(){
   files.forEach(function(f,i){
     var li=document.createElement('li');
     var reorder = (TOOLS[current].multi && files.length>1)
-      ? '<button class="mv" onclick="pdfMove('+i+',-1)" title="Up">▲</button><button class="mv" onclick="pdfMove('+i+',1)" title="Down">▼</button>':'';
-    li.innerHTML='<span class="nm">'+escapeHtml(f.name)+'</span><span class="sz">'+fmt(f.size)+'</span>'+reorder+'<button onclick="pdfRemoveFile('+i+')" title="Remove">✕</button>';
+      ? '<button class="mv" onclick="pdfMove('+i+',-1)" title="Move up" aria-label="Move file up">▲</button><button class="mv" onclick="pdfMove('+i+',1)" title="Move down" aria-label="Move file down">▼</button>':'';
+    li.innerHTML='<span class="nm">'+escapeHtml(f.name)+'</span><span class="sz">'+fmt(f.size)+'</span>'+reorder+'<button onclick="pdfRemoveFile('+i+')" title="Remove" aria-label="Remove file">✕</button>';
     ul.appendChild(li);
   });
   var go=$('go');
@@ -168,8 +168,18 @@ function render(){
   } else if(custom){ cu.classList.add('pdfhidden'); }
 }
 
-/* ---------- pdf.js / pdf-lib refs ---------- */
-var PDFDocument, degrees, StandardFonts, rgb;
+/* ---------- pdf.js / pdf-lib refs (lazy-loaded on first use) ---------- */
+var PDFDocument, degrees, StandardFonts, rgb, _libs;
+function ensureLibs(){
+  if(_libs) return _libs;
+  _libs=(async function(){
+    if(!window.PDFLib) await loadScript('/vendor/pdf-lib.min.js');
+    if(!window.pdfjsLib) await loadScript('/vendor/pdf.min.js');
+    PDFDocument=PDFLib.PDFDocument; degrees=PDFLib.degrees; StandardFonts=PDFLib.StandardFonts; rgb=PDFLib.rgb;
+    pdfjsLib.GlobalWorkerOptions.workerSrc='/vendor/pdf.worker.min.js';
+  })();
+  return _libs;
+}
 function renderPageToJpeg(page,scale,quality){
   var vp=page.getViewport({scale:scale});
   var canvas=document.createElement('canvas'); canvas.width=Math.floor(vp.width); canvas.height=Math.floor(vp.height);
@@ -180,6 +190,7 @@ function renderPageToJpeg(page,scale,quality){
 
 /* ---------- run ---------- */
 async function run(){
+  await ensureLibs();
   if(current==='merge'){
     var out=await PDFDocument.create();
     for(const f of files){ var src=await PDFDocument.load(await f.arrayBuffer()); var pages=await out.copyPages(src,src.getPageIndices()); pages.forEach(function(p){out.addPage(p);}); }
@@ -315,6 +326,7 @@ async function run(){
 async function buildOrganizeUI(){
   customState.built=true; customState._map=new Map();
   var cu=$('customUI'); cu.innerHTML='<div class="tooldesc">Loading pages…</div>';
+  await ensureLibs();
   var bytes=await files[0].arrayBuffer(); customState.bytes=bytes;
   var pdf=await pdfjsLib.getDocument({data:bytes.slice(0)}).promise; customState.order=[];
   cu.innerHTML='';
@@ -329,8 +341,8 @@ async function buildOrganizeUI(){
     await page.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise; cell.appendChild(cv);
     var pg=document.createElement('div'); pg.className='pg'; pg.textContent='Page '+n; cell.appendChild(pg);
     var acts=document.createElement('div'); acts.className='acts';
-    var rb=document.createElement('button'); rb.textContent='⟳'; rb.title='Rotate';
-    var db=document.createElement('button'); db.textContent='✕'; db.title='Remove / restore';
+    var rb=document.createElement('button'); rb.textContent='⟳'; rb.title='Rotate'; rb.setAttribute('aria-label','Rotate page '+n);
+    var db=document.createElement('button'); db.textContent='✕'; db.title='Remove / restore'; db.setAttribute('aria-label','Remove or restore page '+n);
     acts.appendChild(rb); acts.appendChild(db); cell.appendChild(acts);
     (function(o,cv,cell,rb,db){
       rb.onclick=function(e){e.stopPropagation(); o.rot=(o.rot+90)%360; cv.style.transform='rotate('+o.rot+'deg)';};
@@ -388,7 +400,7 @@ async function qpdfRun(args,bytes){
 
 /* ---------- ads (guarded; runs anywhere .adslot exists) ---------- */
 var ADSENSE_CLIENT="";
-function initAds(){ if(!ADSENSE_CLIENT) return; var s=document.createElement('script'); s.async=true; s.crossOrigin='anonymous'; s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADSENSE_CLIENT; document.head.appendChild(s); document.querySelectorAll('.adslot').forEach(function(slot){ slot.dataset.live='1'; slot.textContent=''; var ins=document.createElement('ins'); ins.className='adsbygoogle'; ins.style.display='block'; ins.style.width='100%'; ins.setAttribute('data-ad-client',ADSENSE_CLIENT); ins.setAttribute('data-ad-format','auto'); ins.setAttribute('data-full-width-responsive','true'); slot.appendChild(ins); (window.adsbygoogle=window.adsbygoogle||[]).push({}); }); }
+function initAds(){ if(!ADSENSE_CLIENT) return; var s=document.createElement('script'); s.async=true; s.crossOrigin='anonymous'; s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADSENSE_CLIENT; document.head.appendChild(s); document.querySelectorAll('.adslot').forEach(function(slot){ slot.dataset.live='1'; slot.style.display='flex'; slot.textContent=''; var ins=document.createElement('ins'); ins.className='adsbygoogle'; ins.style.display='block'; ins.style.width='100%'; ins.setAttribute('data-ad-client',ADSENSE_CLIENT); ins.setAttribute('data-ad-format','auto'); ins.setAttribute('data-full-width-responsive','true'); slot.appendChild(ins); (window.adsbygoogle=window.adsbygoogle||[]).push({}); }); }
 
 /* ---------- search (full mode only) ---------- */
 function searchTools(q){ q=q.toLowerCase().trim(); if(!q) return []; return Object.keys(TOOLS).map(function(t){ var c=TOOLS[t]; var hay=(t+' '+c.title+' '+c.desc+' '+(c.kw||'')).toLowerCase(); var score=0; q.split(/\s+/).forEach(function(w){ if(w && hay.indexOf(w)>-1) score += hay.indexOf(w)<40?2:1; }); return {t:t,c:c,score:score}; }).filter(function(x){return x.score>0;}).sort(function(a,b){return b.score-a.score;}).slice(0,5); }
@@ -396,11 +408,13 @@ function searchTools(q){ q=q.toLowerCase().trim(); if(!q) return []; return Obje
 /* ---------- boot ---------- */
 function boot(){
   mount=$('pdfApp'); if(!mount) return;
-  if(!window.PDFLib || !window.pdfjsLib){ mount.innerHTML='<div class="pdfcard">This tool needs JavaScript enabled.</div>'; return; }
-  PDFDocument=PDFLib.PDFDocument; degrees=PDFLib.degrees; StandardFonts=PDFLib.StandardFonts; rgb=PDFLib.rgb;
-  pdfjsLib.GlobalWorkerOptions.workerSrc='/vendor/pdf.worker.min.js';
   single = mount.hasAttribute('data-tool');
   buildShell();
+
+  // Warm the PDF libraries as soon as the user shows intent (hover/touch the drop zone),
+  // so they're ready by the time a file is added — keeps them off the initial load path.
+  var warm=function(){ ensureLibs(); $('drop').removeEventListener('pointerenter',warm); $('drop').removeEventListener('touchstart',warm); };
+  $('drop').addEventListener('pointerenter',warm); $('drop').addEventListener('touchstart',warm,{passive:true});
 
   $('drop').onclick=function(){$('picker').click();};
   $('picker').onchange=function(e){addFiles(e.target.files);};
