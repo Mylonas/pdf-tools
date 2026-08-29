@@ -399,7 +399,7 @@ async function qpdfRun(args,bytes){
 }
 
 /* ---------- ads (guarded; runs anywhere .adslot exists) ---------- */
-var ADSENSE_CLIENT="";
+var ADSENSE_CLIENT="ca-pub-4547647290394610";
 function initAds(){ if(!ADSENSE_CLIENT) return; var s=document.createElement('script'); s.async=true; s.crossOrigin='anonymous'; s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADSENSE_CLIENT; document.head.appendChild(s); document.querySelectorAll('.adslot').forEach(function(slot){ slot.dataset.live='1'; slot.style.display='flex'; slot.textContent=''; var ins=document.createElement('ins'); ins.className='adsbygoogle'; ins.style.display='block'; ins.style.width='100%'; ins.setAttribute('data-ad-client',ADSENSE_CLIENT); ins.setAttribute('data-ad-format','auto'); ins.setAttribute('data-full-width-responsive','true'); slot.appendChild(ins); (window.adsbygoogle=window.adsbygoogle||[]).push({}); }); }
 
 /* ---------- search (full mode only) ---------- */
