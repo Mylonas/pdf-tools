@@ -1,11 +1,12 @@
 /* Shared theme handling for meldpdf.
-   Default = light (white). Users can toggle to dark; choice persists.
+   Follows OS preference by default. Manual toggle overrides and is persisted.
    Loaded in <head> (not deferred) so data-theme is set before first paint. */
 (function () {
   var root = document.documentElement;
   var saved;
   try { saved = localStorage.getItem('theme'); } catch (e) { saved = null; }
-  root.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
+  var osDark = window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches;
+  root.setAttribute('data-theme', (saved === 'dark' || saved === 'light') ? saved : (osDark ? 'dark' : 'light'));
 
   function icon(t) { return t === 'light' ? '🌙' : '☀️'; }
   function label(t) { return t === 'light' ? 'Switch to dark theme' : 'Switch to light theme'; }
