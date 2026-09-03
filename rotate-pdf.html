@@ -62,6 +62,20 @@
   <details><summary>Does rotating reduce quality?</summary><p>No. Rotation only changes page orientation metadata; text and images are untouched.</p></details>
   <details><summary>Is my file uploaded?</summary><p>No. Everything happens locally in your browser. See our <a href="/privacy">privacy policy</a>.</p></details>
 
+  <h2>How PDF rotation works internally</h2>
+  <p>A PDF page has a <code>/Rotate</code> entry in its page dictionary — a number that tells the viewer how many degrees clockwise to turn the content before displaying it. When you rotate a page with this tool, it updates that value (0, 90, 180, or 270). The actual page content — text, images, vector paths — is not redrawn or re-encoded. This is why rotation is lossless and nearly instant regardless of file size: the tool changes a single number per page rather than re-rendering pixels. It also means the file size stays virtually the same after rotation.</p>
+
+  <h2>When to rotate vs re-scan</h2>
+  <p>Rotation fixes orientation — it turns a sideways page upright. It does <strong>not</strong> fix a page that was placed crookedly on the scanner glass (a slight diagonal skew). If your scan is tilted by a few degrees, rotation in 90-degree increments will not help. In that case you need deskew software, or simply re-scan the page with the paper aligned properly. Use rotation when the page is exactly 90, 180, or 270 degrees off from where it should be — which covers the vast majority of scanner and phone-camera orientation mistakes.</p>
+
+  <h2>Rotation and printing</h2>
+  <p>A permanently rotated PDF prints in its corrected orientation on every printer and operating system. This matters because some printers ignore the rotation flag when it is only set as a "view" preference in a reader app. By writing the rotation into the file itself, meldpdf ensures the printed output matches what you see on screen. If you are preparing a document for double-sided printing, make sure all pages face the same way first — a single upside-down page in the middle will flip on paper too.</p>
+
+  <details><summary>Can I rotate a PDF by an arbitrary angle, like 45 degrees?</summary><p>No. The PDF specification only supports rotation in 90-degree increments (0, 90, 180, 270). Arbitrary-angle rotation would require re-rendering every element on the page into a new coordinate space, which is a fundamentally different operation. If you need a slight angle correction (deskewing), image-editing or OCR software is the right tool.</p></details>
+  <details><summary>Will rotation affect text selection or searchability?</summary><p>No. Because rotation changes metadata rather than content, selectable text stays selectable and searchable text stays searchable. Copy-paste, find-in-page, and screen readers all work exactly as before.</p></details>
+
+  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 3 September 2026.</p>
+
   <div class="related">
     <a href="/merge-pdf">Merge PDFs</a>
     <a href="/split-pdf">Split a PDF</a>

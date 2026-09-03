@@ -66,6 +66,33 @@
   <details><summary>Can you remove a password I don't know?</summary><p>No. That would be cracking encryption, which we don't do. You need the current password.</p></details>
   <details><summary>How strong is it?</summary><p>256-bit AES, the strongest standard PDF encryption.</p></details>
 
+  <h2>How PDF encryption works</h2>
+  <p>When you add a password with this tool, the PDF is encrypted using <strong>AES-256</strong> (Advanced Encryption Standard with a 256-bit key). This is the strongest encryption level defined in the PDF specification and the same standard used by governments and financial institutions to protect classified data. The encryption scrambles the file's contents so that without the correct password, the data is unreadable — not just hidden, but mathematically inaccessible.</p>
+  <p>The PDF format actually supports two types of password: a <strong>user password</strong> (sometimes called the "open password") that prevents anyone from opening the file, and an <strong>owner password</strong> (sometimes called the "permissions password") that restricts actions like printing, copying text, or editing while still allowing the file to be opened. This tool sets a user password — the stronger of the two — which means the file cannot be opened at all without the correct password.</p>
+
+  <h2>When to encrypt a PDF</h2>
+  <p>Password protection is worth using whenever a PDF contains information you would not want a stranger to read. Common situations include:</p>
+  <ul>
+    <li><strong>Emailing sensitive documents</strong> — tax returns, contracts, medical records, ID copies. Email is not encrypted end-to-end by default, so a password adds a layer of protection in transit and at rest.</li>
+    <li><strong>Sharing via cloud storage</strong> — if a shared link leaks or is guessed, the file is still locked.</li>
+    <li><strong>Archiving personal records</strong> — protecting files on your own drive guards against someone accessing your computer or backup.</li>
+    <li><strong>Client deliverables</strong> — sending a password-protected report to a client and sharing the password through a separate channel (a text message, a phone call) is standard practice in many industries.</li>
+  </ul>
+  <p>Always share the password through a <strong>different channel</strong> than the PDF itself. Putting both in the same email defeats the purpose.</p>
+
+  <h2>Limitations of PDF passwords</h2>
+  <p>PDF encryption is strong, but it is worth understanding its boundaries:</p>
+  <ul>
+    <li>A <strong>user password</strong> (the kind this tool sets) is genuinely secure. Without the password, the file's contents are encrypted and cannot be read. The strength depends entirely on the password you choose — a short or common password can be brute-forced, while a long, random passphrase is effectively unbreakable.</li>
+    <li>An <strong>owner password</strong> (permissions-only) is a different story. It restricts actions like printing or copying, but because the file can still be <em>opened</em>, the data is technically accessible. Several freely available tools can remove owner-password restrictions without knowing the password. This is why meldpdf sets a user password — it is the only kind that provides real security.</li>
+    <li><strong>Once someone has the password</strong>, they can remove it and redistribute the unprotected file. Encryption controls access, not redistribution.</li>
+  </ul>
+
+  <details><summary>What happens if I forget the password?</summary><p>The file is permanently locked. There is no backdoor, no recovery option, and no way for meldpdf or anyone else to open it. This is by design — if the password could be recovered, the encryption would be meaningless. Always store your password in a password manager or other secure place.</p></details>
+  <details><summary>Can I password-protect a PDF on my phone?</summary><p>Yes. This tool runs in any modern browser, including on iOS and Android. The encryption engine downloads once and works the same way as on a desktop computer.</p></details>
+
+  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 3 September 2026.</p>
+
   <div class="related">
     <a href="/protect-pdf">Protect / Unlock PDF</a>
     <a href="/remove-pdf-metadata">Remove metadata</a>

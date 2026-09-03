@@ -67,6 +67,36 @@
   <details><summary>Which languages are supported?</summary><p>English, Greek, Russian, French, German, Spanish and Italian.</p></details>
   <details><summary>My extracted text was empty — why?</summary><p>Your PDF is scanned (a picture of text). Run OCR to turn the picture into text.</p></details>
 
+  <h2>How OCR works under the hood</h2>
+  <p>When you run OCR on meldpdf, a recognition engine called Tesseract.js loads in your browser. It is a WebAssembly (WASM) port of the open-source Tesseract OCR engine, the same engine that powers Google's document scanning. The first time you use it, a language model file (typically 2 to 12 MB depending on the language) downloads and is cached by your browser for future use.</p>
+  <p>The engine works in stages. First, it analyses the image to find blocks of text, separating them from pictures, lines and whitespace. Then it segments each block into individual lines and characters. Finally, it runs pattern recognition against the language model — comparing the shapes it found to known letter forms — and outputs its best guess for every character. Modern Tesseract also uses a neural-network recogniser (LSTM) that reads sequences of characters in context, which improves accuracy on real-world text considerably compared to older shape-matching alone.</p>
+  <p>All of this runs on your device. The scanned image is never sent to a server, and the recognised text exists only in your browser until you download it.</p>
+
+  <h2>What OCR can and can't do</h2>
+  <p>OCR is remarkably good at reading clean, printed text — typed letters on a white background at 300 DPI or higher will typically produce near-perfect results. But it has limits worth knowing about:</p>
+  <ul>
+    <li><strong>Handwriting</strong> is difficult. Tesseract is trained primarily on printed fonts. Neat block handwriting may partially work, but cursive or messy handwriting will produce poor results or gibberish.</li>
+    <li><strong>Tables and columns</strong> can confuse the layout analysis. The engine may merge columns or read across rows incorrectly. For structured data, you may need to crop each column separately or clean the output manually.</li>
+    <li><strong>Low-resolution or blurry scans</strong> hurt accuracy significantly. If letters are fuzzy at the pixel level, the engine cannot distinguish similar shapes (like "rn" vs "m" or "1" vs "l").</li>
+    <li><strong>Decorative fonts, watermarks and background noise</strong> interfere with recognition. A clean, high-contrast scan is always best.</li>
+    <li><strong>Mathematical notation, chemical formulas and musical scores</strong> are outside the engine's training and won't be recognised meaningfully.</li>
+  </ul>
+  <p>In short, OCR is excellent for extracting body text from scanned documents, receipts, letters and book pages. It is not a substitute for manual transcription of complex or handwritten material.</p>
+
+  <h2>After OCR — what to do with the text</h2>
+  <p>Once you have the recognised text, there are several useful next steps depending on what you need:</p>
+  <ul>
+    <li><strong>Search and find.</strong> Paste the text into any editor or note-taking app and use Ctrl+F to find the information you need. This is the most common reason people OCR a scan — to make it searchable.</li>
+    <li><strong>Convert to Word or other formats.</strong> Copy the text into a Word document, Google Doc, or any word processor. You will likely need to fix formatting, paragraph breaks, and the occasional misread character, but the bulk of the typing is done for you.</li>
+    <li><strong>Extract specific data.</strong> If you scanned a receipt, invoice or form, pull out the numbers, dates or names you need without retyping them.</li>
+    <li><strong>Archive and index.</strong> Save the text alongside the original scan so you can search your document archive later by content, not just by filename.</li>
+  </ul>
+
+  <details><summary>How long does OCR take?</summary><p>It depends on the number of pages and your device's processing power. A single page typically takes a few seconds on a modern computer or phone. A ten-page document might take 20 to 40 seconds. The first run is slower because the language model needs to download; subsequent runs use the cached model and start faster.</p></details>
+  <details><summary>Can I OCR a multi-page document?</summary><p>Yes. Add a multi-page PDF and the engine processes each page in sequence. Longer documents take proportionally longer, but there is no hard page limit — it depends on your device's memory and patience. For very large documents (50+ pages), you may want to split them first using the <a href="/split-pdf">Split PDF</a> tool and OCR in batches.</p></details>
+
+  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 3 September 2026.</p>
+
   <div class="related">
     <a href="/ocr-pdf">OCR PDF</a>
     <a href="/extract-text-from-pdf">Extract text</a>

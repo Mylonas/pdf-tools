@@ -21,7 +21,7 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"AboutPage","name":"About meldpdf","url":"https://meldpdf.com/about","dateModified":"2026-08-11"},
-{"@type":"Organization","name":"meldpdf","url":"https://meldpdf.com/","logo":"https://meldpdf.com/og-image.svg","description":"An independent, privacy-first PDF toolkit that runs entirely in the browser.","sameAs":["https://github.com/Mylonas/pdf-tools"]},
+{"@type":"Organization","name":"Black Falcon Studios","url":"https://meldpdf.com/","logo":"https://meldpdf.com/og-image.svg","description":"An independent, privacy-first PDF toolkit that runs entirely in the browser.","sameAs":["https://github.com/Mylonas/pdf-tools"]},
 {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"meldpdf","item":"https://meldpdf.com/"},{"@type":"ListItem","position":2,"name":"About","item":"https://meldpdf.com/about"}]}
 ]}
 </script>
@@ -52,9 +52,13 @@
   </ul>
 
   <h2>Who makes it</h2>
-  <p>meldpdf is built and maintained by an independent developer, not a large company. It's a focused side project with a clear goal: the simplest, most private way to handle a PDF. Questions, bug reports and suggestions are welcome — see the <a href="/contact">contact page</a>.</p>
+  <p>meldpdf is a product of <strong>Black Falcon Studios</strong>, a small, independent software studio focused on privacy-first web tools. We started meldpdf because we were tired of uploading sensitive contracts and bank statements to random PDF sites that keep your files on their servers. Every tool here was born from a real task we needed to do ourselves — merging invoices, stripping metadata before sharing, compressing scans that were too large to email — and we thought other people probably needed the same thing without the privacy trade-off.</p>
+  <p>We're a small team, not a faceless corporation, and we read every piece of feedback. If something doesn't work or you wish a tool existed, we genuinely want to know — see the <a href="/contact">contact page</a>.</p>
 
-  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 11 August 2026.</p>
+  <h2>Why we built it this way</h2>
+  <p>Most online PDF tools work by uploading your file to a remote server, processing it there, and sending it back. That means a third party — and anyone who breaches that third party — can read your documents. We took the opposite approach: everything runs in your browser using open-source WebAssembly and JavaScript libraries. The trade-off is that very large files can be slower than a server-side tool, but we think that's a fair price for keeping your documents private by default.</p>
+
+  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 3 September 2026.</p>
   <div class="related">
     <a href="/">All PDF tools</a>
     <a href="/pdf-privacy">How private is this?</a>

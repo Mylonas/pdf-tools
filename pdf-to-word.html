@@ -60,7 +60,41 @@
   <details><summary>Is my PDF uploaded?</summary><p>No — the text is extracted and the Word file built in your browser. See our <a href="/privacy">privacy policy</a>.</p></details>
   <details><summary>Will the layout be preserved exactly?</summary><p>The text is kept and made editable; complex layouts, columns and images are not reproduced.</p></details>
   <details><summary>I got a blank document — why?</summary><p>Your PDF is scanned. Run <a href="/ocr-pdf">OCR</a> first, then convert.</p></details>
+  <details><summary>Can I convert a password-protected PDF?</summary><p>If the PDF requires a password to open, you'll need to remove the protection first. If it only restricts printing or copying but opens without a password, the tool can usually extract the text.</p></details>
+  <details><summary>Which Word format does it produce?</summary><p>The output is a <code>.doc</code> file that opens in Microsoft Word, Google Docs, LibreOffice Writer and most other word processors. It contains the extracted text as editable paragraphs.</p></details>
 
+  <h2>When PDF to Word works well</h2>
+  <p>This tool is at its best with <strong>text-heavy documents</strong> — the kind of files where the words are the point and the layout is secondary. Letters, memos, reports, essays, articles and contracts all convert cleanly. If you need to edit a paragraph, fix a typo or reuse a section of text, PDF to Word gives you an editable document in seconds.</p>
+  <p>It also works well for extracting content from forms and applications where the text is stored as real characters rather than scanned images. Government forms, insurance documents and financial statements that were generated digitally usually contain extractable text.</p>
+
+  <h2>Limitations of browser-based conversion</h2>
+  <p>Because the conversion runs entirely in your browser without a server, there are trade-offs compared to heavyweight desktop tools:</p>
+  <ul>
+    <li><strong>Layout is not preserved.</strong> Multi-column layouts, headers, footers, page numbers and text boxes are flattened into a simple text flow. You get the words in reading order, not the visual arrangement.</li>
+    <li><strong>Tables lose their structure.</strong> Table content is extracted as text, but the rows and columns are not recreated in the Word document. You may need to rebuild the table manually.</li>
+    <li><strong>Images are not included.</strong> Photographs, logos and graphics embedded in the PDF do not appear in the Word file. The tool focuses on text extraction.</li>
+    <li><strong>Fonts may differ.</strong> The Word document uses your system's default fonts, not the fonts embedded in the PDF.</li>
+  </ul>
+  <p>For most people who just need to grab the text and edit it, these trade-offs are perfectly acceptable. The benefit is that your file stays private and the conversion is instant.</p>
+
+  <h2>Alternatives for complex documents</h2>
+  <p>If you need a Word file that faithfully reproduces the original PDF's layout — columns, images, tables and all — a browser-based tool isn't the right fit. Here are better options for those cases:</p>
+  <ul>
+    <li><strong>Adobe Acrobat</strong> offers the most accurate PDF-to-Word conversion, preserving tables, images and formatting. It requires a paid subscription.</li>
+    <li><strong>Google Docs</strong> can open a PDF and attempt to convert it. Upload the PDF to Google Drive, right-click it and choose "Open with Google Docs." The results vary but it handles simple layouts reasonably well.</li>
+    <li><strong>LibreOffice Draw</strong> can open PDFs and preserve some layout elements. It's free and works offline.</li>
+    <li><strong>Microsoft Word</strong> itself can open PDFs directly (File > Open) and does a decent job with moderately complex layouts.</li>
+  </ul>
+
+  <h2>Tips for the best result</h2>
+  <ul>
+    <li><strong>Start with a digital PDF.</strong> Documents created from Word, Google Docs or any application produce clean text. Scanned documents need <a href="/ocr-pdf">OCR</a> first.</li>
+    <li><strong>Check the output.</strong> Skim the Word file to make sure paragraphs are in the right order and nothing was missed.</li>
+    <li><strong>Use Extract text if you only need plain text.</strong> If you don't need a Word file specifically, <a href="/extract-text-from-pdf">Extract text</a> gives you a lightweight .txt file instead.</li>
+    <li><strong>Break large PDFs into sections.</strong> If you only need a few pages, use <a href="/split-pdf">Split PDF</a> first to isolate them, then convert.</li>
+  </ul>
+
+  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 3 September 2026.</p>
   <div class="related">
     <a href="/pdf-to-word">PDF to Word</a>
     <a href="/extract-text-from-pdf">Extract text</a>

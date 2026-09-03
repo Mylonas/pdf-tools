@@ -64,6 +64,27 @@
   <details><summary>Will merging reduce the quality of my PDF?</summary><p>No. Pages are copied exactly, so text stays selectable and images keep their original resolution.</p></details>
   <details><summary>Do you keep a copy of my files?</summary><p>No. We have no server that receives your files — everything stays in your browser. See our <a href="/privacy">privacy policy</a>.</p></details>
 
+  <h2>What happens to bookmarks and links when merging</h2>
+  <p>Each PDF you add may contain internal bookmarks (a clickable table of contents), hyperlinks, and cross-references. When files are merged, bookmarks that pointed to a page within the same source file continue to work because the page is still present in the combined document. However, bookmarks that referenced a page by a named destination in a different file will not resolve automatically — the merge tool preserves page content, not inter-file link targets. If your final document needs a working table of contents that spans all the source files, the simplest approach is to create one after merging using a PDF editor that supports bookmark editing.</p>
+  <p>External hyperlinks — URLs that open a website — are unaffected by merging. They are stored as annotations on each page and carry over exactly as they were.</p>
+
+  <h2>Tips for a clean merged document</h2>
+  <ul>
+    <li><strong>Match page sizes first.</strong> If one file is A4 and another is Letter, the merged PDF will contain both sizes. Most viewers handle this fine, but it can look odd when printed. Converting all files to the same page size in advance avoids surprises.</li>
+    <li><strong>Check the page order before downloading.</strong> Drag files up and down in the list to set the sequence. It takes a second now and saves you from re-doing the merge later.</li>
+    <li><strong>Watch for duplicate pages.</strong> If two source PDFs share a cover page or header sheet, you will end up with it twice. Remove the duplicate from one file before merging, or use the <a href="/delete-pages-from-pdf">delete pages</a> tool on the result afterward.</li>
+    <li><strong>Name your output.</strong> The downloaded file is called <em>merged.pdf</em> by default. Rename it to something descriptive right away so you can find it later.</li>
+    <li><strong>Review the result.</strong> Quickly scroll through the merged file to confirm nothing is out of order and that no blank pages snuck in from the source documents.</li>
+  </ul>
+
+  <h2>How browser-based merging compares to desktop software</h2>
+  <p>Desktop PDF editors like Adobe Acrobat or PDF-XChange offer merging as one feature among many, but they require installation, often a paid licence, and updates. Online services handle it on a server, which is convenient but means your files travel over the internet and sit on someone else's machine, however briefly. A browser-based tool like meldpdf splits the difference: there is nothing to install, the merge runs instantly using the JavaScript engine built into your browser, and your documents never leave your device. The trade-off is that extremely large files (hundreds of megabytes) may be slower than a native desktop app, because browsers allocate less memory than a dedicated program. For everyday merges — combining a handful of documents under 50 MB total — the browser approach is the fastest and most private option available.</p>
+
+  <details><summary>Can I merge password-protected PDFs?</summary><p>Not directly. A PDF that requires a password to open is encrypted, and the merge library cannot read its pages without decrypting it first. Open the file in any PDF reader, enter the password, and export or print it to a new unprotected PDF. Then merge that copy. If the PDF only has a permissions password (restricting printing or editing but not opening), most merge tools — including this one — can process it normally.</p></details>
+  <details><summary>What is the maximum file size I can merge?</summary><p>There is no hard limit set by the tool. The practical ceiling depends on your device's available memory. Most laptops and desktops can comfortably handle a combined total of 100-200 MB. If you hit a memory wall, try closing other browser tabs first, or merge in batches: combine the first half of your files, then merge that result with the second half.</p></details>
+
+  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 3 September 2026.</p>
+
   <div class="related">
     <a href="/split-pdf">Split a PDF</a>
     <a href="/rotate-pdf">Rotate a PDF</a>

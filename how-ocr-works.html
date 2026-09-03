@@ -1,0 +1,143 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How OCR Works: Turning Scans into Searchable Text — meldpdf</title>
+<meta name="description" content="Understand how OCR (optical character recognition) converts scanned documents into searchable, editable text. Learn about accuracy factors, tips for better results, and limitations.">
+<link rel="canonical" href="https://meldpdf.com/how-ocr-works">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233355ff'/%3E%3Crect x='9' y='7' width='14' height='18' rx='2' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css">
+<script src="/theme.js"></script>
+<meta name="google-adsense-account" content="ca-pub-4547647290394610">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4547647290394610" crossorigin="anonymous"></script>
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="How OCR Works: Turning Scans into Searchable Text">
+<meta property="og:description" content="How OCR converts scanned documents into searchable text, with tips for better accuracy.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://meldpdf.com/how-ocr-works">
+<meta property="og:image" content="https://meldpdf.com/og-image.svg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Article","headline":"How OCR Works: Turning Scans into Searchable Text","description":"Understand how OCR (optical character recognition) converts scanned documents into searchable, editable text. Learn about accuracy factors, tips for better results, and limitations.","url":"https://meldpdf.com/how-ocr-works","datePublished":"2026-09-03","dateModified":"2026-09-03","publisher":{"@type":"Organization","name":"Black Falcon Studios","url":"https://meldpdf.com/"}},
+{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"meldpdf","item":"https://meldpdf.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://meldpdf.com/guides"},{"@type":"ListItem","position":3,"name":"How OCR Works","item":"https://meldpdf.com/how-ocr-works"}]},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How accurate is OCR?","acceptedAnswer":{"@type":"Answer","text":"Modern OCR engines achieve 95-99% character accuracy on clean, well-scanned documents with standard fonts. Accuracy drops significantly with poor scan quality, handwriting, unusual fonts, or complex layouts. A 99% accuracy rate still means roughly one error per 100 characters, so proofreading is always recommended for important documents."}},
+{"@type":"Question","name":"Can OCR recognize handwriting?","acceptedAnswer":{"@type":"Answer","text":"Basic OCR engines struggle with handwriting. Specialized handwriting recognition (ICR or intelligent character recognition) exists but is far less accurate than printed text recognition. Neat, consistent handwriting in block letters produces usable results. Cursive or messy handwriting remains very difficult for any automated system."}},
+{"@type":"Question","name":"Does browser-based OCR keep my documents private?","acceptedAnswer":{"@type":"Answer","text":"It depends on the tool. Browser-based OCR that runs entirely in your browser using JavaScript or WebAssembly (like meldpdf) never sends your files to a server. Other tools labeled as browser-based may still upload files for server-side processing. Check whether the tool explicitly states that processing happens locally."}}
+]}
+]}
+</script>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
+    <nav class="nav"><a href="/">Tools</a><a href="/guides">Guides</a><a href="/contact">Contact</a><a href="/about">About</a></nav>
+  </div>
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/guides">Guides</a> &rsaquo; <span aria-current="page">How OCR Works</span></nav>
+
+  <h1>How OCR Works: Turning Scans into Searchable Text</h1>
+  <p class="lead">You scan a paper document and get a PDF, but you cannot search it, copy text from it, or edit it. The PDF is just a picture of text. OCR (optical character recognition) solves this by detecting the characters in the image and converting them into actual, machine-readable text. This guide explains how OCR works under the hood, what affects accuracy, and how to get the best results.</p>
+
+  <h2>What is OCR?</h2>
+  <p>Optical character recognition is the technology that reads text from images. It takes an image containing text (a scanned page, a photograph of a sign, a screenshot) and outputs the text as editable, searchable characters. The concept has been around since the 1920s, but modern OCR engines powered by machine learning are dramatically more capable than their predecessors.</p>
+  <p>In the context of PDFs, OCR is most commonly used to convert scanned documents into searchable PDFs. The original image remains visible, but an invisible text layer is placed on top, allowing you to search, select, and copy text.</p>
+
+  <h2>How OCR works: the three stages</h2>
+  <h3>Stage 1: Image preprocessing</h3>
+  <p>Before any character recognition happens, the OCR engine cleans up the input image. Raw scans are rarely perfect. They may be slightly rotated, have uneven lighting, contain speckles from dust on the scanner glass, or have low contrast between text and background.</p>
+  <p>Common preprocessing steps include:</p>
+  <ul>
+    <li><strong>Deskewing.</strong> Correcting the angle if the page was not perfectly straight on the scanner. Even a 1-2 degree tilt can hurt recognition accuracy.</li>
+    <li><strong>Binarization.</strong> Converting the image to pure black and white. This separates text (black) from background (white) and eliminates grayscale noise. Adaptive binarization handles pages with uneven lighting better than a simple threshold.</li>
+    <li><strong>Noise removal.</strong> Removing small dots, speckles, and artifacts that are not part of the text. These could be misinterpreted as periods, commas, or parts of characters.</li>
+    <li><strong>Contrast enhancement.</strong> Increasing the difference between text and background to make characters more distinct.</li>
+    <li><strong>Layout analysis.</strong> Identifying where on the page text blocks, columns, images, tables, and headers are located. This tells the engine what to process and in what order.</li>
+  </ul>
+
+  <h3>Stage 2: Character recognition</h3>
+  <p>This is the core of OCR. The engine examines each text region and identifies individual characters. Modern engines use two main approaches, often combined:</p>
+  <p><strong>Pattern matching</strong> compares each character shape against a library of known character templates. It works well for standard printed fonts but struggles with unusual typefaces or degraded text. This was the dominant approach in early OCR systems.</p>
+  <p><strong>Machine learning (neural networks)</strong> is the modern approach. Instead of comparing against templates, a trained neural network analyzes the visual features of each character and predicts what it is. Deep learning models can handle a wide variety of fonts, sizes, and degradation levels because they learn from millions of examples during training.</p>
+  <p>Most current OCR engines, including Tesseract (the most widely used open-source engine), use LSTM (long short-term memory) neural networks that process text as sequences rather than individual characters. This allows the model to use context: if it is unsure whether a character is an "l" or a "1", it considers the surrounding characters to make a better prediction.</p>
+
+  <h3>Stage 3: Post-processing</h3>
+  <p>After character recognition, the raw output is cleaned up:</p>
+  <ul>
+    <li><strong>Dictionary checking.</strong> Recognized words are compared against a dictionary for the target language. If "tbe" is recognized but "the" is in the dictionary, the engine may correct the output.</li>
+    <li><strong>Confidence scoring.</strong> Each recognized character gets a confidence score. Low-confidence characters can be flagged for manual review.</li>
+    <li><strong>Layout reconstruction.</strong> Characters are grouped into words, words into lines, and lines into paragraphs, preserving the document's reading order.</li>
+    <li><strong>Format preservation.</strong> In searchable PDF output, the recognized text is positioned to align precisely with the underlying image, so text selection matches what you see visually.</li>
+  </ul>
+
+  <h2>What affects OCR accuracy</h2>
+  <p>OCR is not magic, and results vary enormously depending on the input. Here are the factors that matter most:</p>
+  <h3>Scan quality</h3>
+  <p>This is the single biggest factor. A clean, high-resolution scan (300 DPI or higher) of a well-printed document will produce near-perfect results. A blurry photograph of a crumpled page will produce garbage. Invest time in getting a good scan, and you will save far more time on corrections.</p>
+  <h3>Font and typeface</h3>
+  <p>Standard serif and sans-serif fonts (Times New Roman, Arial, Helvetica, Calibri) are recognized with very high accuracy. Decorative fonts, script fonts, very small text (below 8pt), and very large display text can cause problems. Monospaced fonts like Courier are usually recognized well.</p>
+  <h3>Language</h3>
+  <p>OCR accuracy varies by language. Latin-alphabet languages with large training datasets (English, French, German, Spanish) achieve the highest accuracy. Languages with complex scripts (Arabic, Chinese, Japanese, Korean, Thai) require specialized models and may have lower accuracy. Mixed-language documents can confuse engines that expect a single language.</p>
+  <h3>Document condition</h3>
+  <p>Faded ink, yellowed paper, coffee stains, creases, and handwritten annotations all reduce accuracy. Historical documents with archaic typefaces pose particular challenges. If you are digitizing old documents, expect to spend time on manual corrections.</p>
+  <h3>Layout complexity</h3>
+  <p>Single-column text is easiest. Multi-column layouts, tables, sidebars, footnotes, and text that wraps around images are harder. The layout analysis stage must correctly identify the reading order, and errors here cause the output to be scrambled even if individual characters are recognized correctly.</p>
+
+  <div class="adslot" data-ad="guide">Advertisement</div>
+
+  <h2>Tips for better OCR results</h2>
+  <p>Follow these practices to maximize accuracy:</p>
+  <ol>
+    <li><strong>Scan at 300 DPI or higher.</strong> This is the sweet spot for text. Going above 600 DPI rarely improves results and increases file size.</li>
+    <li><strong>Use a flatbed scanner for important documents.</strong> Phone cameras introduce perspective distortion, uneven lighting, and motion blur. A flatbed scanner produces consistently flat, well-lit images.</li>
+    <li><strong>Clean the scanner glass.</strong> Dust and smudges on the glass appear as specks in every scan and can be misread as punctuation.</li>
+    <li><strong>Scan in grayscale, not color.</strong> Unless the document uses colored text that needs to be distinguished, grayscale produces smaller files and often better recognition than color scans.</li>
+    <li><strong>Keep pages straight.</strong> A slight tilt forces the engine to deskew, which can introduce artifacts. Align pages carefully on the scanner.</li>
+    <li><strong>Specify the correct language.</strong> If the OCR tool allows you to select a language, choose the right one. This enables language-specific dictionaries and character sets that improve accuracy.</li>
+    <li><strong>Proofread the output.</strong> Even at 99% accuracy, a single page of text can contain several errors. Always review OCR output before using it in important contexts.</li>
+  </ol>
+
+  <h2>Browser-based OCR vs server-side OCR</h2>
+  <p>OCR tools fall into two categories based on where the processing happens:</p>
+  <h3>Server-side OCR</h3>
+  <p>Traditional OCR services upload your document to a server, process it there, and return the result. This allows the service to use powerful hardware and large models. The downsides are privacy (your document sits on someone else's server), dependency on an internet connection, and potential file size limits.</p>
+  <h3>Browser-based OCR</h3>
+  <p>Modern JavaScript engines and WebAssembly have made it possible to run OCR directly in the browser. Libraries like Tesseract.js bring the full Tesseract OCR engine to the client side. Your documents never leave your device.</p>
+  <p>The tradeoff is speed. Browser-based OCR runs on your device's hardware, which is typically slower than a dedicated server. A 10-page scanned document might take 30 seconds to a few minutes in the browser versus a few seconds on a server. For most users and document sizes, this is an acceptable tradeoff for the privacy benefit.</p>
+  <p>The meldpdf <a href="/ocr-pdf">OCR PDF</a> and <a href="/extract-text-from-pdf">Extract Text</a> tools process everything in your browser. No data is uploaded.</p>
+
+  <h2>Limitations of OCR</h2>
+  <p>OCR has real limits that are important to understand:</p>
+  <ul>
+    <li><strong>Handwriting.</strong> General-purpose OCR does not handle handwriting reliably. Specialized handwriting recognition (ICR) exists but has far lower accuracy than printed text recognition, especially for cursive.</li>
+    <li><strong>Mathematical notation.</strong> Equations, formulas, and special symbols are poorly handled by standard OCR engines. Specialized tools exist for math OCR but are not part of general-purpose software.</li>
+    <li><strong>Tables and structure.</strong> OCR can recognize the text in a table, but accurately reconstructing the table structure (which cell goes where) is a separate and harder problem.</li>
+    <li><strong>Perfect accuracy is not guaranteed.</strong> Even under ideal conditions, OCR can misread characters. Never assume OCR output is error-free, especially for numbers, proper nouns, and technical terms.</li>
+    <li><strong>Formatting loss.</strong> Bold, italic, font sizes, and colors are usually not preserved. The output is plain text, or at best, text with approximate formatting.</li>
+  </ul>
+
+  <h2>Common OCR use cases</h2>
+  <ul>
+    <li><strong>Digitizing paper archives.</strong> Businesses and institutions with filing cabinets full of paper use OCR to create searchable digital archives.</li>
+    <li><strong>Making scanned PDFs searchable.</strong> The most common everyday use. You scan a document, run OCR, and now you can search for text within it.</li>
+    <li><strong>Extracting data from invoices and receipts.</strong> Accounting software uses OCR to pull amounts, dates, and vendor names from scanned invoices.</li>
+    <li><strong>Accessibility.</strong> OCR makes scanned documents accessible to screen readers, which cannot read images of text.</li>
+    <li><strong>Translation.</strong> OCR enables the translation of printed text in foreign languages by converting the image to text that can be fed into a translation tool.</li>
+  </ul>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>How accurate is OCR?</summary><p>Modern OCR engines achieve 95-99% character accuracy on clean, well-scanned documents with standard fonts. Accuracy drops significantly with poor scan quality, handwriting, unusual fonts, or complex layouts. A 99% accuracy rate still means roughly one error per 100 characters, so proofreading is always recommended for important documents.</p></details>
+  <details><summary>Can OCR recognize handwriting?</summary><p>Basic OCR engines struggle with handwriting. Specialized handwriting recognition (ICR or intelligent character recognition) exists but is far less accurate than printed text recognition. Neat, consistent handwriting in block letters produces usable results. Cursive or messy handwriting remains very difficult for any automated system.</p></details>
+  <details><summary>Does browser-based OCR keep my documents private?</summary><p>It depends on the tool. Browser-based OCR that runs entirely in your browser using JavaScript or WebAssembly (like meldpdf) never sends your files to a server. Other tools labeled as browser-based may still upload files for server-side processing. Check whether the tool explicitly states that processing happens locally.</p></details>
+
+  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 3 September 2026.</p>
+  <div class="related">
+    <a href="/how-to-merge-pdfs">How to Merge PDFs</a>
+    <a href="/pdf-vs-docx">PDF vs Word: When to Use Which</a>
+  </div>
+  <footer><a href="/">meldpdf</a> · <a href="/about">About</a> · <a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="/cookie-policy">Cookies</a> · <a href="/terms">Terms</a></footer>
+</div>
+</body>
+</html>

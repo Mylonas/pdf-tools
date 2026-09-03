@@ -62,7 +62,27 @@
   <details><summary>Which image formats are supported?</summary><p>JPG/JPEG and PNG. Other formats can be exported to JPG or PNG from most photo apps first.</p></details>
   <details><summary>Is there a watermark?</summary><p>No watermark, ever. The PDF contains only your images.</p></details>
   <details><summary>Do my images get uploaded?</summary><p>No. Conversion runs locally in your browser. See our <a href="/privacy">privacy policy</a>.</p></details>
+  <details><summary>Can I add both JPG and PNG in one go?</summary><p>Yes. You can mix JPG and PNG files in the same batch. Each image becomes its own page in the final PDF regardless of format.</p></details>
+  <details><summary>Will the image quality change?</summary><p>No. Images are embedded in the PDF at their original resolution and quality. There is no re-compression or downsampling — what you put in is what you get out.</p></details>
 
+  <h2>How the conversion works</h2>
+  <p>When you click <strong>Create PDF</strong>, the tool reads each image file you added and places it on its own page inside a new PDF document. The page dimensions match the pixel size of the image, so a 1200 by 1600 pixel photo produces a page that is 1200 by 1600 points. The images are embedded at full resolution with no re-encoding, which means the quality you see in the original file is the quality you get in the PDF. Because everything runs in JavaScript inside your browser, no data ever leaves your device.</p>
+  <p>The order of pages follows the order you arrange the thumbnails in the tool. You can drag images into whatever sequence you need before converting, so the final document reads the way you intend.</p>
+
+  <h2>JPG vs PNG in your PDF</h2>
+  <p>Both formats work, but they have different strengths. <strong>JPG</strong> files are typically smaller because the format uses lossy compression. That makes them a good default for photographs, scanned receipts and anything where a slight loss of sharpness is invisible. <strong>PNG</strong> files use lossless compression and preserve every pixel exactly. They are the better choice for screenshots, diagrams, text-heavy images and anything with sharp edges or transparent regions.</p>
+  <p>You can mix both formats in one batch. Each image keeps its native compression inside the PDF, so a JPG stays a JPG and a PNG stays a PNG. If you are unsure which to use, JPG is fine for photos and PNG is fine for everything else.</p>
+
+  <h2>Preparing your images before converting</h2>
+  <p>A little preparation goes a long way toward a clean-looking PDF.</p>
+  <ul>
+    <li><strong>Crop first.</strong> Remove borders, extra whitespace or background clutter before adding images. The page is sized to the image, so a tightly cropped photo produces a tighter page.</li>
+    <li><strong>Use a consistent size.</strong> If you want uniform pages — for example an A4-style document — resize or crop every image to the same pixel dimensions before converting. Otherwise each page will be a different size, which is fine for reference but looks uneven when printed.</li>
+    <li><strong>Check the orientation.</strong> Rotate any sideways photos in your photo app first. The tool does not auto-rotate based on EXIF data, so a landscape photo saved in portrait orientation will appear sideways in the PDF.</li>
+    <li><strong>Keep file sizes reasonable.</strong> Very large images (above 4000 pixels on a side) work but produce big PDFs and take longer to process. Downscale if you don't need extreme resolution.</li>
+  </ul>
+
+  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 3 September 2026.</p>
   <div class="related">
     <a href="/pdf-to-jpg">PDF to JPG</a>
     <a href="/merge-pdf">Merge PDFs</a>

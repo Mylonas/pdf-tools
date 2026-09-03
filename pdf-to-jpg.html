@@ -62,7 +62,32 @@
   <details><summary>Does it convert every page?</summary><p>Yes — each page of the PDF becomes its own JPG. A short document downloads several images.</p></details>
   <details><summary>Can I get PNG instead of JPG?</summary><p>JPG is the current output. PNG export is on the roadmap; let us know if you need it.</p></details>
   <details><summary>Is my PDF uploaded?</summary><p>No. Rendering runs locally in your browser with PDF.js. See our <a href="/privacy">privacy policy</a>.</p></details>
+  <details><summary>Can I convert just one page instead of the whole PDF?</summary><p>The tool converts every page. To get a single page, use <a href="/split-pdf">Split PDF</a> to extract the page you need, then convert that one-page PDF to JPG.</p></details>
+  <details><summary>What resolution are the images?</summary><p>It depends on the quality setting. Standard renders at 1x the PDF page size, High at 2x, and Very high at 3x. A typical A4 page at Very high quality produces an image around 2480 by 3508 pixels.</p></details>
 
+  <h2>How rendering works</h2>
+  <p>Behind the scenes, the tool uses <strong>PDF.js</strong> — the same open-source library Firefox uses to display PDFs. When you add a file, PDF.js parses the document structure, loads each page's fonts and graphics, and draws the result onto an HTML canvas element at the resolution you selected. The canvas is then exported as a JPG file. Because this all happens in your browser's JavaScript engine, your PDF never leaves your device and no server is involved.</p>
+  <p>Rendering time depends on the complexity of each page and the quality level. A simple text page converts almost instantly. Pages packed with vector graphics, embedded images or unusual fonts may take a second or two, especially at Very high quality. If your browser tab slows down during conversion, that's normal — it's doing real work.</p>
+
+  <h2>JPG vs PNG — which to choose</h2>
+  <p><strong>JPG</strong> uses lossy compression, which means it trades a small amount of sharpness for a much smaller file. That trade-off is invisible on photographs and most mixed-content pages. It's the right pick when you need compact images for sharing, uploading or embedding in slides.</p>
+  <p><strong>PNG</strong> is lossless — every pixel is exact. That matters when your PDF contains fine text, thin lines, diagrams or anything where even a hint of blur would be noticeable. PNG files are larger, but they reproduce those details perfectly. If you need PNG output, use our <a href="/pdf-to-png">PDF to PNG</a> tool.</p>
+  <p>Rule of thumb: JPG for photos and general sharing, PNG for text-heavy pages and technical diagrams.</p>
+
+  <h2>What you lose in the conversion</h2>
+  <p>A JPG is a picture of a page, not the page itself. That means several things disappear in the process:</p>
+  <ul>
+    <li><strong>Selectable text.</strong> You can't highlight or copy words from a JPG. If you need the text, use <a href="/extract-text-from-pdf">Extract text</a> instead.</li>
+    <li><strong>Clickable links.</strong> Hyperlinks in the PDF become part of the image and are no longer clickable.</li>
+    <li><strong>Form fields.</strong> Fillable fields, checkboxes and dropdowns are flattened into the image.</li>
+    <li><strong>Searchability.</strong> Search engines and screen readers can't read the text inside a JPG.</li>
+  </ul>
+  <p>None of this is a problem when the goal is to share a visual snapshot of a page. Just be aware that the JPG is a flat image, not an interactive document.</p>
+
+  <h2>Working with the downloaded images</h2>
+  <p>Each page downloads as a separate file named <em>page-1.jpg</em>, <em>page-2.jpg</em> and so on. From there you can do whatever you like with them: drop them into a slide deck, paste them into a document, upload them to a website, attach them to an email, or open them in an image editor for cropping and annotation. If you later want to recombine the images into a PDF, our <a href="/jpg-to-pdf">JPG to PDF</a> tool does exactly that.</p>
+
+  <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 3 September 2026.</p>
   <div class="related">
     <a href="/jpg-to-pdf">JPG to PDF</a>
     <a href="/merge-pdf">Merge PDFs</a>
