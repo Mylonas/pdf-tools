@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF Accessibility Guide: Making PDFs Everyone Can Read — meldpdf</title>
+<meta name="description" content="How to make PDFs accessible — tagged structure, reading order, alt text, document language — why it matters for screen readers and legal compliance, and how to get it right.">
+<link rel="canonical" href="https://meldpdf.com/pdf-accessibility-guide">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233355ff'/%3E%3Crect x='9' y='7' width='14' height='18' rx='2' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css">
+<script src="/theme.js"></script>
+<meta name="google-adsense-account" content="ca-pub-4547647290394610">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4547647290394610" crossorigin="anonymous"></script>
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="PDF Accessibility Guide: Making PDFs Everyone Can Read">
+<meta property="og:description" content="How to create accessible PDFs — tagged structure, reading order, alt text — and why it matters.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://meldpdf.com/pdf-accessibility-guide">
+<meta property="og:image" content="https://meldpdf.com/og-image.svg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Article","headline":"PDF accessibility guide: making PDFs everyone can read","description":"How to make PDFs accessible — tagged structure, reading order, alt text, document language — why it matters for screen readers and legal compliance, and how to get it right.","url":"https://meldpdf.com/pdf-accessibility-guide","datePublished":"2026-09-03","dateModified":"2026-09-03","publisher":{"@type":"Organization","name":"meldpdf","url":"https://meldpdf.com/"}},
+{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"meldpdf","item":"https://meldpdf.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://meldpdf.com/guides"},{"@type":"ListItem","position":3,"name":"PDF accessibility guide","item":"https://meldpdf.com/pdf-accessibility-guide"}]},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is a tagged PDF?","acceptedAnswer":{"@type":"Answer","text":"A tagged PDF contains a hidden structure tree that labels each piece of content — headings, paragraphs, images, tables, lists — so assistive technology can present the document in a meaningful order rather than just reading raw text left-to-right, top-to-bottom."}},
+{"@type":"Question","name":"Can I make a scanned PDF accessible?","acceptedAnswer":{"@type":"Answer","text":"Partially. OCR converts the image to searchable text, which is essential, but you'll still need to add tags, reading order, and alt text manually. Starting from a born-digital source is far easier."}},
+{"@type":"Question","name":"Is PDF accessibility legally required?","acceptedAnswer":{"@type":"Answer","text":"In many jurisdictions, yes — for public-sector documents and often for private organisations too. The EU's European Accessibility Act, the US ADA and Section 508, and the UK's Public Sector Bodies Accessibility Regulations all set requirements that effectively mandate accessible PDFs."}}
+]}
+]}
+</script>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
+    <nav class="nav"><a href="/">Tools</a><a href="/guides">Guides</a><a href="/contact">Contact</a><a href="/about">About</a></nav>
+  </div>
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/guides">Guides</a> &rsaquo; <span aria-current="page">PDF accessibility guide</span></nav>
+
+  <h1>PDF accessibility guide: making PDFs everyone can read</h1>
+  <p class="lead">Around 15% of the world's population lives with some form of disability. When you publish a PDF that isn't accessible, you're locking out a significant number of potential readers — and in many places, breaking the law.</p>
+
+  <h2>Why PDF accessibility matters</h2>
+  <p>A PDF that looks perfectly fine on screen can be completely unusable for someone relying on a <strong>screen reader</strong> (software that reads content aloud or outputs it to a Braille display). Without proper structure, a screen reader might read a two-column layout as jumbled nonsense, skip images entirely, or present a table as an incomprehensible stream of numbers.</p>
+  <p>Beyond individual access, there are legal requirements. The <strong>EU European Accessibility Act</strong> (effective June 2025), the <strong>US ADA and Section 508</strong>, the <strong>UK Public Sector Bodies Accessibility Regulations</strong>, and similar laws in Canada, Australia, and elsewhere increasingly require that published documents — including PDFs — meet accessibility standards, typically <strong>WCAG 2.1 AA</strong> and the PDF-specific <strong>PDF/UA</strong> (ISO 14289) standard.</p>
+
+  <h2>The building blocks of an accessible PDF</h2>
+
+  <h3>1. Tags (document structure)</h3>
+  <p>Tags are the single most important accessibility feature. A <strong>tagged PDF</strong> contains a hidden structure tree that labels each piece of content: headings (<code>&lt;H1&gt;</code> through <code>&lt;H6&gt;</code>), paragraphs (<code>&lt;P&gt;</code>), lists (<code>&lt;L&gt;</code>, <code>&lt;LI&gt;</code>), tables (<code>&lt;Table&gt;</code>, <code>&lt;TR&gt;</code>, <code>&lt;TD&gt;</code>, <code>&lt;TH&gt;</code>), figures (<code>&lt;Figure&gt;</code>), and more.</p>
+  <p>This structure lets a screen reader navigate the document meaningfully — jumping between headings, reading table headers with each cell, and distinguishing a footnote from body text. Without tags, the screen reader can only guess at the structure based on visual position, which fails for anything beyond the simplest single-column text.</p>
+
+  <h3>2. Reading order</h3>
+  <p>The visual layout of a PDF doesn't determine the order in which content is read. A two-column page, a sidebar, a pull quote — these all need an explicit reading order so assistive technology presents them in a sequence that makes sense. The tag tree defines this order. If it's wrong, a screen reader might read a page footer before the second paragraph, or interleave columns unpredictably.</p>
+
+  <h3>3. Alternative text for images</h3>
+  <p>Every meaningful image needs <strong>alt text</strong> — a concise description of what the image conveys. Decorative images (borders, spacers, backgrounds) should be marked as artefacts so screen readers skip them entirely. Charts and diagrams need descriptions that communicate the data or relationship, not just "chart" or "figure 3".</p>
+
+  <div class="adslot" data-ad="guide">Advertisement</div>
+
+  <h3>4. Document language</h3>
+  <p>The PDF's metadata should declare its primary language (e.g. English, Greek, German). This tells the screen reader which pronunciation rules to use. Documents with passages in multiple languages should tag each passage with the correct language so the voice switches appropriately.</p>
+
+  <h3>5. Table structure</h3>
+  <p>Tables need proper header cells (<code>&lt;TH&gt;</code>) marked distinctly from data cells (<code>&lt;TD&gt;</code>), and for complex tables, header-cell associations so a screen reader can announce "Column: Revenue, Row: Q3" rather than just a bare number. Avoid using tables for visual layout — layout tables confuse screen readers that expect tabular data.</p>
+
+  <h3>6. Bookmarks and navigation</h3>
+  <p>For longer documents, bookmarks (the clickable outline panel in a PDF viewer) give all readers — not just those using assistive technology — a way to navigate quickly. They're generated automatically from headings in most authoring tools.</p>
+
+  <h3>7. Colour and contrast</h3>
+  <p>Information conveyed through colour alone is invisible to people with colour vision deficiency. Use labels, patterns, or other visual cues alongside colour. Text should meet a minimum contrast ratio of <strong>4.5:1</strong> against its background (3:1 for large text) per WCAG guidelines.</p>
+
+  <h2>Creating accessible PDFs from scratch</h2>
+  <p>The easiest path to an accessible PDF is to start right in the source document:</p>
+  <ul>
+    <li><strong>Use real headings</strong> in Word, Google Docs, or InDesign — don't just make text bold and large. These map directly to PDF heading tags on export.</li>
+    <li><strong>Add alt text to every image</strong> in the source. Most word processors have a right-click option for this.</li>
+    <li><strong>Use built-in list and table tools</strong> rather than manually formatting with tabs or spaces.</li>
+    <li><strong>Set the document language</strong> in your word processor's properties.</li>
+    <li><strong>Export with "Tagged PDF" enabled.</strong> In Word, this is the default for "Save as PDF". In InDesign, check "Create Tagged PDF" in the export dialog. In Google Docs, the PDF export is tagged automatically.</li>
+    <li><strong>Check the result.</strong> Open the PDF in Adobe Acrobat's Accessibility Checker, or use the free <a href="https://pax.difi.no/app/verify" rel="nofollow noopener">PAC (PDF Accessibility Checker)</a> tool. Fix any issues it flags.</li>
+  </ul>
+
+  <h2>Fixing an existing inaccessible PDF</h2>
+  <p>If you have a PDF without tags or with broken structure:</p>
+  <ul>
+    <li><strong>Go back to the source</strong> if possible. Fixing the Word or InDesign file and re-exporting is almost always faster than remediating the PDF directly.</li>
+    <li><strong>If the source is lost</strong>, Adobe Acrobat Pro's "Autotag Document" can add a basic tag structure, but it requires manual review and correction — especially for complex layouts, tables, and images.</li>
+    <li><strong>For scanned documents</strong>, run OCR first to create a text layer (meldpdf's <a href="/ocr-pdf">OCR tool</a> can do this), then add tags. A scanned page without OCR is just an image and is completely inaccessible to screen readers.</li>
+  </ul>
+
+  <h2>Quick checklist</h2>
+  <ul>
+    <li>Is the PDF tagged? (Check in File &gt; Properties &gt; Description in most viewers.)</li>
+    <li>Does the reading order match the logical flow of content?</li>
+    <li>Do all meaningful images have alt text?</li>
+    <li>Is the document language set?</li>
+    <li>Are tables properly structured with header cells?</li>
+    <li>Is colour contrast sufficient (4.5:1 minimum)?</li>
+    <li>Does information rely on colour alone anywhere?</li>
+    <li>For long documents: are there bookmarks?</li>
+  </ul>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>What is a tagged PDF?</summary><p>A tagged PDF contains a hidden structure tree that labels each piece of content — headings, paragraphs, images, tables, lists — so assistive technology can present the document in a meaningful order rather than just reading raw text left-to-right, top-to-bottom.</p></details>
+  <details><summary>Can I make a scanned PDF accessible?</summary><p>Partially. OCR converts the image to searchable text, which is essential, but you'll still need to add tags, reading order, and alt text manually. Starting from a born-digital source is far easier.</p></details>
+  <details><summary>Is PDF accessibility legally required?</summary><p>In many jurisdictions, yes — for public-sector documents and often for private organisations too. The EU's European Accessibility Act, the US ADA and Section 508, and the UK's Public Sector Bodies Accessibility Regulations all set requirements that effectively mandate accessible PDFs.</p></details>
+
+  <div class="related">
+    <a href="/ocr-pdf">OCR a scanned PDF</a>
+    <a href="/extract-text-from-pdf">Extract text from PDF</a>
+    <a href="/is-it-safe-to-upload-pdf">Is uploading PDFs safe?</a>
+    <a href="/guides">All guides</a>
+  </div>
+  <footer><a href="/">meldpdf</a> · <a href="/about">About</a> · <a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="/cookie-policy">Cookies</a> · <a href="/terms">Terms</a></footer>
+</div>
+</body>
+</html>

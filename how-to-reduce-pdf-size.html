@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Reduce PDF File Size — meldpdf</title>
+<meta name="description" content="Why PDFs get large, practical methods to shrink them — image compression, font subsetting, removing unused objects — and when to use lossy vs lossless compression.">
+<link rel="canonical" href="https://meldpdf.com/how-to-reduce-pdf-size">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233355ff'/%3E%3Crect x='9' y='7' width='14' height='18' rx='2' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css">
+<script src="/theme.js"></script>
+<meta name="google-adsense-account" content="ca-pub-4547647290394610">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4547647290394610" crossorigin="anonymous"></script>
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="How to Reduce PDF File Size">
+<meta property="og:description" content="Why PDFs get large and practical methods to shrink them without losing what matters.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://meldpdf.com/how-to-reduce-pdf-size">
+<meta property="og:image" content="https://meldpdf.com/og-image.svg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Article","headline":"How to reduce PDF file size","description":"Why PDFs get large, practical methods to shrink them — image compression, font subsetting, removing unused objects — and when to use lossy vs lossless compression.","url":"https://meldpdf.com/how-to-reduce-pdf-size","datePublished":"2026-09-03","dateModified":"2026-09-03","publisher":{"@type":"Organization","name":"meldpdf","url":"https://meldpdf.com/"}},
+{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"meldpdf","item":"https://meldpdf.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://meldpdf.com/guides"},{"@type":"ListItem","position":3,"name":"How to reduce PDF file size","item":"https://meldpdf.com/how-to-reduce-pdf-size"}]},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Does compressing a PDF reduce its quality?","acceptedAnswer":{"@type":"Answer","text":"It depends on the method. Lossless compression (removing duplicate objects, compressing streams) preserves quality perfectly. Image resampling reduces quality slightly but often imperceptibly at reasonable settings."}},
+{"@type":"Question","name":"How much can I shrink a PDF?","acceptedAnswer":{"@type":"Answer","text":"It varies enormously. A scan-heavy PDF with uncompressed images might shrink 80-90%. A text-only PDF that's already optimized might barely budge. The biggest gains come from image-heavy files."}},
+{"@type":"Question","name":"Will compressing a PDF break form fields or links?","acceptedAnswer":{"@type":"Answer","text":"Standard compression should not. Removing unused objects or re-exporting from scratch can occasionally strip interactive elements, so check the result if your PDF has fillable forms."}}
+]}
+]}
+</script>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="brand" href="/"><span class="logo"></span> meldpdf</a>
+    <nav class="nav"><a href="/">Tools</a><a href="/guides">Guides</a><a href="/contact">Contact</a><a href="/about">About</a></nav>
+  </div>
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/guides">Guides</a> &rsaquo; <span aria-current="page">How to reduce PDF file size</span></nav>
+
+  <h1>How to reduce PDF file size</h1>
+  <p class="lead">A 30 MB attachment that bounces off an email limit. A portfolio that takes forever to load. Large PDFs are a common headache — here's what actually makes them big and how to fix it.</p>
+
+  <h2>Why PDFs get large</h2>
+  <p>A PDF is a container, and its size depends almost entirely on what's packed inside. The usual culprits:</p>
+  <ul>
+    <li><strong>High-resolution images.</strong> This is the number-one cause. A single uncompressed 300 DPI photograph can add 20+ MB. Scanned documents are essentially full-page images and are almost always the largest PDFs you'll encounter.</li>
+    <li><strong>Embedded fonts.</strong> Each font embedded in full adds 100-500 KB. A document using several typefaces — or one that embeds entire font families instead of just the characters used — can accumulate several megabytes of font data alone.</li>
+    <li><strong>Duplicate objects.</strong> Poorly generated PDFs sometimes embed the same image or font multiple times. PDF editors that append changes without cleaning up also leave orphaned objects in the file.</li>
+    <li><strong>Metadata and attachments.</strong> Embedded thumbnails, XML metadata streams, ICC colour profiles, and attached files all add weight. These are usually small individually, but they accumulate.</li>
+    <li><strong>No stream compression.</strong> PDF content streams (the instructions that draw text and graphics) can be compressed with Flate (similar to ZIP). Some older generators leave them uncompressed.</li>
+  </ul>
+
+  <div class="adslot" data-ad="guide">Advertisement</div>
+
+  <h2>Methods to reduce file size</h2>
+
+  <h3>1. Recompress or downsample images</h3>
+  <p>Since images dominate most large PDFs, reducing their resolution or switching to a more efficient compression produces the biggest savings. A 300 DPI image resampled to 150 DPI is one-quarter the pixel count — and for on-screen viewing, 150 DPI is more than sufficient. JPEG compression at quality 75-85 is usually indistinguishable from the original for photographs.</p>
+  <p>This is <strong>lossy</strong> compression: some image detail is permanently discarded. For documents destined for print at high quality, you may want to keep higher resolution. For email, web, or on-screen review, the trade-off is almost always worth it.</p>
+
+  <h3>2. Subset fonts</h3>
+  <p>Instead of embedding an entire font (every glyph in every weight), font subsetting includes only the characters the document actually uses. A font with 3,000 glyphs might only need 80 for a given document. Most modern PDF export tools do this by default, but older or misconfigured software sometimes embeds full fonts. Re-exporting the document from the original application with subsetting enabled can recover significant space.</p>
+
+  <h3>3. Remove unused objects</h3>
+  <p>PDF editing tools that add and remove pages often leave orphaned objects — images, fonts, or content streams that no page references any more, but that still sit in the file. A cleanup pass that removes unreferenced objects and rebuilds the cross-reference table can trim surprising amounts of dead weight without touching visible content at all.</p>
+
+  <h3>4. Compress content streams</h3>
+  <p>If the PDF's text and vector drawing instructions are stored uncompressed, applying Flate compression to those streams can save 50-70% of their size. This is completely lossless — the rendered page is bit-for-bit identical. Most tools do this automatically during optimization.</p>
+
+  <h3>5. Strip unnecessary metadata</h3>
+  <p>Embedded thumbnails, XML metadata, document history, and attached files can be removed if you don't need them. This is usually a minor saving compared to image compression, but it helps — and for privacy-sensitive documents, stripping metadata is good practice regardless. meldpdf has a dedicated <a href="/remove-pdf-metadata">remove PDF metadata</a> tool for this.</p>
+
+  <h3>6. Re-export from the source</h3>
+  <p>If you still have the original document (a Word file, InDesign layout, or presentation), re-exporting to PDF with optimized settings is often the most effective single step. You get clean font subsetting, proper image compression, and no accumulated cruft from editing. Most applications have a "reduce file size" or "optimized" export preset.</p>
+
+  <h2>Lossy vs lossless: when to use each</h2>
+  <p><strong>Lossless</strong> techniques — removing unused objects, compressing streams, stripping metadata, subsetting fonts — should always be applied. They reduce size without any quality trade-off.</p>
+  <p><strong>Lossy</strong> techniques — image resampling and JPEG recompression — trade some image quality for much larger size savings. Use them when:</p>
+  <ul>
+    <li>The PDF will be viewed on screen, not printed at high resolution.</li>
+    <li>You need to meet a file size limit (email, upload forms).</li>
+    <li>The document contains scanned pages that don't need archival quality.</li>
+  </ul>
+  <p>Avoid lossy compression when the PDF contains line art, technical drawings, or text rendered as images — these degrade more visibly than photographs.</p>
+
+  <h2>Compress a PDF now</h2>
+  <p>meldpdf's <a href="/compress-pdf">compress PDF</a> tool runs entirely in your browser. Pick your file, choose a compression level, and download the result — your document is never uploaded to a server. It handles image resampling, stream compression, and object cleanup in one step.</p>
+
+  <h2>Frequently asked questions</h2>
+  <details><summary>Does compressing a PDF reduce its quality?</summary><p>It depends on the method. Lossless compression (removing duplicate objects, compressing streams) preserves quality perfectly. Image resampling reduces quality slightly but often imperceptibly at reasonable settings.</p></details>
+  <details><summary>How much can I shrink a PDF?</summary><p>It varies enormously. A scan-heavy PDF with uncompressed images might shrink 80-90%. A text-only PDF that's already optimized might barely budge. The biggest gains come from image-heavy files.</p></details>
+  <details><summary>Will compressing a PDF break form fields or links?</summary><p>Standard compression should not. Removing unused objects or re-exporting from scratch can occasionally strip interactive elements, so check the result if your PDF has fillable forms.</p></details>
+
+  <div class="related">
+    <a href="/compress-pdf">Compress PDF tool</a>
+    <a href="/remove-pdf-metadata">Remove metadata</a>
+    <a href="/is-it-safe-to-upload-pdf">Is uploading PDFs safe?</a>
+    <a href="/guides">All guides</a>
+  </div>
+  <footer><a href="/">meldpdf</a> · <a href="/about">About</a> · <a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="/cookie-policy">Cookies</a> · <a href="/terms">Terms</a></footer>
+</div>
+</body>
+</html>
