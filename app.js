@@ -20,6 +20,29 @@ var CSS = `
 .pdftabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
 .pdftabs button{border:1.5px solid var(--line);background:var(--card);color:var(--soft);padding:9px 15px;border-radius:22px;font-weight:700;cursor:pointer;font-size:14px}
 .pdftabs button.on{border-color:var(--brand);background:var(--brand);color:#fff}
+.toolgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin:0 0 18px}
+.toolbtn{display:flex;flex-direction:column;align-items:flex-start;gap:6px;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;text-align:left;transition:border-color .15s,box-shadow .15s;position:relative}
+.toolbtn:hover{border-color:var(--brand);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.toolbtn.on{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand-soft)}
+.toolbtn .tbicon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+.toolbtn .tbname{font-size:14px;font-weight:700;color:var(--ink)}
+.toolbtn .tbdesc{font-size:12px;color:var(--soft);line-height:1.35}
+.toolbtn .tbbadge{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.tbic-orange{background:#fff0eb;color:#d85a30}.tbic-blue{background:#e8f1fb;color:#3578d8}.tbic-teal{background:#e4f5ef;color:#1d9e75}
+.tbic-purple{background:#efedfe;color:#7f77dd}.tbic-amber{background:#faf0dc;color:#ba7517}.tbic-pink{background:#fceaf0;color:#d4537e}
+.tbic-red{background:#fcebeb;color:#e24b4a}.tbic-green{background:#ecf4e0;color:#639922}
+.tbbg-green{background:#e4f5ef;color:#0f6e56}
+:root[data-theme="dark"] .tbic-orange{background:#3a1a0e;color:#f0997b}
+:root[data-theme="dark"] .tbic-blue{background:#0a2c4a;color:#85b7eb}
+:root[data-theme="dark"] .tbic-teal{background:#0a3028;color:#5dcaa5}
+:root[data-theme="dark"] .tbic-purple{background:#22204a;color:#afa9ec}
+:root[data-theme="dark"] .tbic-amber{background:#3a2206;color:#fac775}
+:root[data-theme="dark"] .tbic-pink{background:#3a1524;color:#ed93b1}
+:root[data-theme="dark"] .tbic-red{background:#3a1515;color:#f09595}
+:root[data-theme="dark"] .tbic-green{background:#1a2e08;color:#97c459}
+:root[data-theme="dark"] .tbbg-green{background:#0a3028;color:#3fc38a}
+.toolback{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--brand);font-size:14px;font-weight:700;cursor:pointer;padding:0;margin:0 0 14px;font-family:inherit}
+.toolback:hover{text-decoration:underline}
 .pdfcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
 .toolhead{font-weight:800;font-size:18px;margin:0 0 4px;color:var(--ink)}
 .tooldesc{color:var(--soft);font-size:14px;margin:0 0 18px}
@@ -74,23 +97,23 @@ var OPT = {
 };
 
 var TOOLS={
-  compress:{title:'Compress PDF',tab:'Compress PDF',desc:'Shrink a PDF for email or upload limits — see the before/after size.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Compress PDF',opts:OPT.compress,kw:'compress reduce shrink smaller size make small mb optimize'},
-  merge:{title:'Merge PDF',tab:'Merge PDF',desc:'Combine several PDFs into one. Drag to reorder.',accept:'application/pdf',hint:'PDF files',multi:true,btn:'Merge PDFs',kw:'merge combine join together'},
-  split:{title:'Split / Extract pages',tab:'Split / Extract',desc:'Extract specific pages or ranges from a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Extract pages',opts:OPT.split,kw:'split extract separate pull pages range'},
-  delete:{title:'Delete pages',tab:'Delete pages',desc:'Remove specific pages from a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Delete pages',opts:OPT.delete,kw:'delete remove pages get rid'},
-  img2pdf:{title:'Images → PDF',tab:'Images → PDF',desc:'Combine JPG/PNG images into a single PDF.',accept:'image/jpeg,image/png',hint:'JPG or PNG images',multi:true,btn:'Create PDF',kw:'image jpg jpeg png photo picture to pdf'},
-  pdf2img:{title:'PDF → JPG',tab:'PDF → JPG',desc:'Export every page of a PDF as a JPG image.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to JPG',opts:OPT.imgq,kw:'pdf to jpg jpeg image convert export'},
-  pdf2png:{title:'PDF → PNG',tab:'PDF → PNG',desc:'Export every page of a PDF as a PNG image.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to PNG',opts:OPT.imgq,kw:'pdf to png image convert export transparent'},
-  rotate:{title:'Rotate PDF',tab:'Rotate',desc:'Rotate all pages of a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Rotate PDF',opts:OPT.rotate,kw:'rotate turn sideways upside down orientation landscape portrait'},
-  pagenum:{title:'Add page numbers',tab:'Page numbers',desc:'Stamp page numbers onto every page of a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Add page numbers',opts:OPT.pagenum,kw:'page numbers number pagination'},
-  watermark:{title:'Watermark PDF',tab:'Watermark',desc:'Add a diagonal text watermark to every page.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Add watermark',opts:OPT.watermark,kw:'watermark stamp confidential draft mark text overlay'},
-  extract:{title:'Extract text',tab:'Extract text',desc:'Pull all text out of a PDF and count pages, words and characters.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Extract text',kw:'extract text copy word count character count read'},
-  organize:{title:'Organize pages',tab:'Organize pages',desc:'Reorder (drag), rotate or delete individual pages, then save.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Save organized PDF',custom:'organize',kw:'organize reorder rearrange move sort arrange pages thumbnails manage'},
-  sign:{title:'Sign PDF',tab:'Sign PDF',desc:'Draw or upload a signature and place it on a page.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Sign & download',custom:'sign',kw:'sign signature esign electronic autograph initials'},
-  pdf2word:{title:'PDF → Word',tab:'PDF → Word',desc:'Extract the text into an editable Word (.doc) document.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to Word',kw:'pdf to word doc docx editable convert microsoft'},
-  metadata:{title:'Metadata viewer & remover',tab:'Metadata',desc:'See a PDF’s hidden metadata, and download a clean copy with it stripped.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'View & strip metadata',kw:'metadata properties author title info remove strip clean privacy exif'},
-  ocr:{title:'OCR scanned PDF',tab:'OCR (scanned)',desc:'Read text from a scanned or image-only PDF (or an image) using on-device OCR.',accept:'application/pdf,image/jpeg,image/png',hint:'A scanned PDF or image',multi:false,btn:'Run OCR',opts:OPT.ocr,kw:'ocr scanned image searchable recognize text scan optical'},
-  protect:{title:'Protect / Unlock PDF',tab:'Protect / Unlock',desc:'Add a password to a PDF, or remove one you know.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Apply',opts:OPT.protect,kw:'protect password encrypt lock secure unlock remove password decrypt permissions'}
+  compress:{title:'Compress PDF',tab:'Compress PDF',desc:'Shrink a PDF for email or upload limits — see the before/after size.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Compress PDF',opts:OPT.compress,kw:'compress reduce shrink smaller size make small mb optimize',icon:'⚡',ic:'orange',badge:'SAVE 90%',sdesc:'Reduce file size'},
+  merge:{title:'Merge PDF',tab:'Merge PDF',desc:'Combine several PDFs into one. Drag to reorder.',accept:'application/pdf',hint:'PDF files',multi:true,btn:'Merge PDFs',kw:'merge combine join together',icon:'📎',ic:'blue',sdesc:'Combine multiple PDFs'},
+  split:{title:'Split / Extract pages',tab:'Split / Extract',desc:'Extract specific pages or ranges from a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Extract pages',opts:OPT.split,kw:'split extract separate pull pages range',icon:'✂️',ic:'teal',sdesc:'Extract specific pages'},
+  delete:{title:'Delete pages',tab:'Delete pages',desc:'Remove specific pages from a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Delete pages',opts:OPT.delete,kw:'delete remove pages get rid',icon:'🗑️',ic:'purple',sdesc:'Remove unwanted pages'},
+  img2pdf:{title:'Images → PDF',tab:'Images → PDF',desc:'Combine JPG/PNG images into a single PDF.',accept:'image/jpeg,image/png',hint:'JPG or PNG images',multi:true,btn:'Create PDF',kw:'image jpg jpeg png photo picture to pdf',icon:'🖼️',ic:'amber',sdesc:'JPG/PNG to PDF'},
+  pdf2img:{title:'PDF → JPG',tab:'PDF → JPG',desc:'Export every page of a PDF as a JPG image.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to JPG',opts:OPT.imgq,kw:'pdf to jpg jpeg image convert export',icon:'📸',ic:'pink',sdesc:'Convert to JPG'},
+  pdf2png:{title:'PDF → PNG',tab:'PDF → PNG',desc:'Export every page of a PDF as a PNG image.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to PNG',opts:OPT.imgq,kw:'pdf to png image convert export transparent',icon:'🎨',ic:'pink',sdesc:'Convert to PNG'},
+  rotate:{title:'Rotate PDF',tab:'Rotate',desc:'Rotate all pages of a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Rotate PDF',opts:OPT.rotate,kw:'rotate turn sideways upside down orientation landscape portrait',icon:'🔄',ic:'teal',sdesc:'Fix page orientation'},
+  pagenum:{title:'Add page numbers',tab:'Page numbers',desc:'Stamp page numbers onto every page of a PDF.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Add page numbers',opts:OPT.pagenum,kw:'page numbers number pagination',icon:'#️⃣',ic:'orange',sdesc:'Stamp page numbers'},
+  watermark:{title:'Watermark PDF',tab:'Watermark',desc:'Add a diagonal text watermark to every page.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Add watermark',opts:OPT.watermark,kw:'watermark stamp confidential draft mark text overlay',icon:'💧',ic:'purple',sdesc:'Add text overlay'},
+  extract:{title:'Extract text',tab:'Extract text',desc:'Pull all text out of a PDF and count pages, words and characters.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Extract text',kw:'extract text copy word count character count read',icon:'📝',ic:'blue',sdesc:'Copy text from PDF'},
+  organize:{title:'Organize pages',tab:'Organize pages',desc:'Reorder (drag), rotate or delete individual pages, then save.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Save organized PDF',custom:'organize',kw:'organize reorder rearrange move sort arrange pages thumbnails manage',icon:'📋',ic:'teal',sdesc:'Reorder and arrange'},
+  sign:{title:'Sign PDF',tab:'Sign PDF',desc:'Draw or upload a signature and place it on a page.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Sign & download',custom:'sign',kw:'sign signature esign electronic autograph initials',icon:'✍️',ic:'green',sdesc:'Draw your signature'},
+  pdf2word:{title:'PDF → Word',tab:'PDF → Word',desc:'Extract the text into an editable Word (.doc) document.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to Word',kw:'pdf to word doc docx editable convert microsoft',icon:'📄',ic:'blue',sdesc:'Convert PDF to DOCX'},
+  metadata:{title:'Metadata viewer & remover',tab:'Metadata',desc:"See a PDF’s hidden metadata, and download a clean copy with it stripped.",accept:'application/pdf',hint:'One PDF file',multi:false,btn:'View & strip metadata',kw:'metadata properties author title info remove strip clean privacy exif',icon:'🔍',ic:'pink',sdesc:'View and strip info'},
+  ocr:{title:'OCR scanned PDF',tab:'OCR (scanned)',desc:'Read text from a scanned or image-only PDF (or an image) using on-device OCR.',accept:'application/pdf,image/jpeg,image/png',hint:'A scanned PDF or image',multi:false,btn:'Run OCR',opts:OPT.ocr,kw:'ocr scanned image searchable recognize text scan optical',icon:'👁️',ic:'amber',sdesc:'Read scanned text'},
+  protect:{title:'Protect / Unlock PDF',tab:'Protect / Unlock',desc:'Add a password to a PDF, or remove one you know.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Apply',opts:OPT.protect,kw:'protect password encrypt lock secure unlock remove password decrypt permissions',icon:'🔒',ic:'red',sdesc:'Password encrypt'}
 };
 
 /* ---------- state + helpers ---------- */
@@ -106,13 +129,28 @@ window.pdfMove=function(i,d){var j=i+d;if(j<0||j>=files.length)return;var t=file
 window.pdfRemoveFile=function(i){files.splice(i,1);render();};
 
 /* ---------- build the shell into #pdfApp ---------- */
+function buildGridHTML(){
+  return Object.keys(TOOLS).map(function(k){
+    var t=TOOLS[k];
+    var badge=t.badge?'<span class="tbbadge tbbg-green">'+t.badge+'</span>':'';
+    return '<button class="toolbtn" data-t="'+k+'">'
+      +badge
+      +'<span class="tbicon tbic-'+t.ic+'">'+t.icon+'</span>'
+      +'<span class="tbname">'+(t.tab||t.title)+'</span>'
+      +'<span class="tbdesc">'+(t.sdesc||'')+'</span>'
+      +'</button>';
+  }).join('');
+}
+
 function buildShell(){
   var html='';
   if(!single){
-    html+='<div class="toolsearch"><input type="text" id="toolSearch" placeholder="🔍 What do you want to do with your PDF? (e.g. “make my PDF smaller”)" autocomplete="off"><div class="searchhits" id="searchHits"></div></div>';
-    html+='<div class="pdftabs" id="pdftabs">'+Object.keys(TOOLS).map(function(k){return '<button data-t="'+k+'">'+(TOOLS[k].tab||TOOLS[k].title)+'</button>';}).join('')+'</div>';
+    html+='<div class="toolsearch"><input type="text" id="toolSearch" placeholder="🔍 What do you want to do with your PDF? (e.g. "make my PDF smaller")" autocomplete="off"><div class="searchhits" id="searchHits"></div></div>';
+    html+='<div class="toolgrid" id="toolgrid">'+buildGridHTML()+'</div>';
   }
-  html+='<div class="pdfcard">'
+  html+='<div id="toolPane"'+(single?'':' class="pdfhidden"')+'>'
+    +(single?'':'<button class="toolback" id="toolBack">← All tools</button>')
+    +'<div class="pdfcard">'
     +'<div class="toolhead" id="toolTitle"></div>'
     +'<div class="tooldesc" id="toolDesc"></div>'
     +'<div class="drop" id="drop"><b>Drop files here</b> or click to choose<br><span id="accepthint"></span></div>'
@@ -123,13 +161,25 @@ function buildShell(){
     +'<button class="go" id="go" disabled>Add files to start</button>'
     +'<div class="status" id="status"></div>'
     +'<div class="pdfresult pdfhidden" id="pdfresult"></div>'
-    +'</div>';
+    +'</div></div>';
   mount.innerHTML=html;
+}
+
+function showGrid(){
+  var g=$('toolgrid'), p=$('toolPane');
+  if(g) g.classList.remove('pdfhidden');
+  if(p) p.classList.add('pdfhidden');
+  files=[]; customState={};
 }
 
 function setTool(t){
   current=t; files=[]; customState={};
-  if(!single){ var tb=$('pdftabs'); if(tb)[].forEach.call(tb.children,function(b){b.classList.toggle('on',b.dataset.t===t);}); }
+  if(!single){
+    var g=$('toolgrid'), p=$('toolPane');
+    if(g) g.classList.add('pdfhidden');
+    if(p) p.classList.remove('pdfhidden');
+    if(g)[].forEach.call(g.children,function(b){b.classList.toggle('on',b.dataset.t===t);});
+  }
   var c=TOOLS[t];
   $('toolTitle').textContent=c.title; $('toolDesc').textContent=c.desc;
   $('accepthint').textContent=c.hint; $('picker').accept=c.accept; $('picker').multiple=!!c.multi;
@@ -379,7 +429,7 @@ function buildSignUI(){
 function updateProtectUI(){
   var mode=$('prMode').value;
   $('prPassLabel').textContent = mode==='lock'?'New password':'Current password';
-  $('prPass').placeholder = mode==='lock'?'Choose a password':'The PDF’s current password';
+  $('prPass').placeholder = mode==='lock'?'Choose a password':"The PDF’s current password";
 }
 
 /* ---------- lazy engines ---------- */
@@ -393,7 +443,7 @@ async function qpdfRun(args,bytes){
   var qpdf=await _qpdfFactory({locateFile:function(){return QPDF_BASE+'qpdf.wasm';},noInitialRun:true,print:function(){},printErr:function(){}});
   qpdf.FS.writeFile('in.pdf',bytes);
   var code=0; try{ code=qpdf.callMain(args); }catch(e){ code=(e&&e.status!=null)?e.status:1; }
-  if(code&&code!==3){ throw new Error($('prMode').value==='unlock' ? 'Could not remove the password — check that it’s correct.' : 'The security engine reported an error (code '+code+').'); }
+  if(code&&code!==3){ throw new Error($('prMode').value==='unlock' ? "Could not remove the password — check that it’s correct." : 'The security engine reported an error (code '+code+').'); }
   var out; try{ out=qpdf.FS.readFile('out.pdf'); }catch(e){ throw new Error('No output was produced — the password may be wrong.'); }
   return out;
 }
@@ -425,18 +475,21 @@ function boot(){
 
   if(single){
     var t=mount.getAttribute('data-tool'); if(!TOOLS[t]) t='merge';
+    var tp=$('toolPane'); if(tp) tp.classList.remove('pdfhidden');
     setTool(t);
   } else {
-    var tb=$('pdftabs'); [].forEach.call(tb.children,function(b){ b.onclick=function(){ setTool(b.dataset.t); }; });
+    var grid=$('toolgrid'); grid.addEventListener('click',function(e){var b=e.target.closest('.toolbtn');if(!b)return;location.hash=b.dataset.t;});
+    var back=$('toolBack'); if(back) back.addEventListener('click',function(){location.hash=''; showGrid();});
     var searchBox=$('toolSearch'), hits=$('searchHits');
     searchBox.addEventListener('input',function(){ var res=searchTools(searchBox.value); hits.innerHTML=res.map(function(x){return '<button data-go="'+x.t+'">'+x.c.title+' — <span style="color:var(--soft)">'+x.c.desc+'</span></button>';}).join(''); });
     hits.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return; location.hash=b.dataset.go; searchBox.value=''; hits.innerHTML=''; searchBox.blur();});
     searchBox.addEventListener('keydown',function(e){if(e.key==='Enter'){var r=searchTools(searchBox.value)[0]; if(r){location.hash=r.t;searchBox.value='';hits.innerHTML='';searchBox.blur();}}});
     document.addEventListener('click',function(e){if(!e.target.closest('.toolsearch'))hits.innerHTML='';});
     var validTool=function(t){return Object.prototype.hasOwnProperty.call(TOOLS,t);};
-    var fromHash=function(){var h=location.hash.replace('#','');return validTool(h)?h:'merge';};
-    setTool(fromHash());
-    window.addEventListener('hashchange',function(){setTool(fromHash());});
+    var fromHash=function(){var h=location.hash.replace('#','');return validTool(h)?h:'';};
+    var initHash=fromHash();
+    if(initHash){ setTool(initHash); } else { showGrid(); }
+    window.addEventListener('hashchange',function(){var h=fromHash(); if(h){setTool(h);} else {showGrid();}});
   }
   var yr=$('yr'); if(yr) yr.textContent=new Date().getFullYear();
   initAds();
