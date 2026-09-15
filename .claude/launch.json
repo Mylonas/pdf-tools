@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "meldpdf",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "3456", "-n"],
+      "port": 3456
+    }
+  ]
+}
