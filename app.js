@@ -11,10 +11,11 @@
 /* ---------- component CSS (theme vars come from the page's :root) ---------- */
 var CSS = `
 .toolsearch{position:relative;margin:0 0 16px}
-.searchrow{display:flex;gap:8px;align-items:stretch}
-.searchrow #toolSearch{flex:1;width:auto;min-width:0}
-.choosebtn{flex:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:0 14px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}
+.searchrow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+.searchrow #toolSearch{flex:1 1 200px;width:auto;min-width:0}
+.choosebtn{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:11px 14px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}
 .choosebtn:hover{border-color:var(--brand);color:var(--brand)}
+@media(max-width:430px){.searchrow #toolSearch{flex-basis:100%}.choosebtn{flex:1 1 100%}}
 .dropsuggest{margin:0 0 16px;background:var(--card);border:1.5px solid var(--brand);border-radius:12px;padding:14px 16px;box-shadow:0 4px 14px rgba(51,85,255,.1)}
 .dropsuggest .sghead{font-size:14px;color:var(--ink);margin:0 0 10px;display:flex;align-items:center;gap:8px}
 .dropsuggest .sghead b{color:var(--brand);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%}
@@ -24,6 +25,13 @@ var CSS = `
 .sgchip:hover{border-color:var(--brand);color:var(--brand)}
 .sgchip .sgi{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
 .toolgrid.dropactive{outline:2.5px dashed var(--brand);outline-offset:8px;border-radius:14px;background:var(--brand-soft)}
+.recent{margin:0 0 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.recent .reclbl{font-size:12px;font-weight:700;color:var(--soft);margin-right:2px}
+.recchip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:22px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none}
+.recchip:hover{border-color:var(--brand);color:var(--brand)}
+.recchip .sgi{width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+.againbtn{margin-top:12px;width:100%;padding:12px;border:1.5px solid var(--line);border-radius:11px;background:var(--card);color:var(--ink);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+.againbtn:hover{border-color:var(--brand);color:var(--brand)}
 #toolSearch{width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-size:15px;font-family:inherit}
 #toolSearch:focus{outline:none;border-color:var(--brand)}
 .searchhits{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;z-index:9;box-shadow:0 8px 24px rgba(0,0,0,.12)}
@@ -160,6 +168,7 @@ function buildShell(){
   if(!single){
     html+='<div class="toolsearch"><div class="searchrow"><input type="text" id="toolSearch" placeholder="🔍 Search tools — e.g. make my PDF smaller" autocomplete="off"><button type="button" class="choosebtn" id="chooseFiles">📂 Choose files</button></div><div class="searchhits" id="searchHits"></div></div>';
     html+='<input type="file" id="homePicker" class="pdfhidden" multiple accept="application/pdf,image/jpeg,image/png">';
+    html+='<div class="recent pdfhidden" id="recent"></div>';
     html+='<div class="dropsuggest pdfhidden" id="dropSuggest"></div>';
     html+='<div class="toolgrid" id="toolgrid">'+buildGridHTML()+'</div>';
   }
@@ -176,6 +185,7 @@ function buildShell(){
     +'<button class="go" id="go" disabled>Add files to start</button>'
     +'<div class="status" id="status"></div>'
     +'<div class="pdfresult pdfhidden" id="pdfresult"></div>'
+    +'<button class="againbtn pdfhidden" id="again" type="button">↺ Process another file</button>'
     +'</div></div>';
   mount.innerHTML=html;
 }
@@ -184,11 +194,12 @@ function showGrid(){
   var g=$('toolgrid'), p=$('toolPane');
   if(g) g.classList.remove('pdfhidden');
   if(p) p.classList.add('pdfhidden');
-  files=[]; customState={}; hideSuggest();
+  files=[]; customState={}; hideSuggest(); renderRecent();
 }
 
 function setTool(t){
-  current=t; files=[]; customState={};
+  current=t; files=[]; customState={}; recentAdd(t);
+  var _ag=$('again'); if(_ag) _ag.classList.add('pdfhidden');
   if(!single){
     var g=$('toolgrid'), p=$('toolPane');
     if(g) g.classList.add('pdfhidden');
@@ -603,6 +614,14 @@ function showSuggest(list){
 }
 function hideSuggest(){ var p=$('dropSuggest'); if(p){ p.classList.add('pdfhidden'); p.innerHTML=''; } pending=[]; }
 
+/* ---------- recently used tools (localStorage) ---------- */
+function recentGet(){ try{ return (JSON.parse(localStorage.getItem('meld_recent')||'[]')||[]).filter(function(k){return Object.prototype.hasOwnProperty.call(TOOLS,k);}); }catch(e){ return []; } }
+function recentAdd(t){ try{ var a=recentGet().filter(function(k){return k!==t;}); a.unshift(t); localStorage.setItem('meld_recent',JSON.stringify(a.slice(0,3))); }catch(e){} }
+function renderRecent(){ var el=$('recent'); if(!el) return; var a=recentGet(); if(!a.length){ el.classList.add('pdfhidden'); el.innerHTML=''; return; } el.classList.remove('pdfhidden'); el.innerHTML='<span class="reclbl">Recently used</span>'+a.map(function(k){ var t=TOOLS[k]; return '<a class="recchip" href="/'+t.page+'" data-r="'+k+'"><span class="sgi tbic-'+t.ic+'">'+t.icon+'</span>'+(t.tab||t.title)+'</a>'; }).join(''); }
+
+/* ---------- clear the tool for another file, without leaving it ---------- */
+function processAnother(){ files=[]; customState={}; var cu=$('customUI'); if(cu){ cu.innerHTML=''; cu.classList.add('pdfhidden'); } var r=$('pdfresult'); if(r){ r.classList.add('pdfhidden'); r.innerHTML=''; } setStatus(''); var ag=$('again'); if(ag) ag.classList.add('pdfhidden'); render(); }
+
 /* ---------- boot ---------- */
 function boot(){
   mount=$('pdfApp'); if(!mount) return;
@@ -619,7 +638,8 @@ function boot(){
   ['dragover','dragenter'].forEach(function(ev){$('drop').addEventListener(ev,function(e){e.preventDefault();$('drop').classList.add('over');});});
   ['dragleave','drop'].forEach(function(ev){$('drop').addEventListener(ev,function(e){e.preventDefault();$('drop').classList.remove('over');});});
   $('drop').addEventListener('drop',function(e){addFiles(e.dataTransfer.files);});
-  $('go').onclick=async function(){ $('go').disabled=true; setStatus('Working…'); $('pdfresult').classList.add('pdfhidden'); try{ await run(); } catch(err){ console.error(err); setStatus('Something went wrong: '+err.message,'err'); } finally{ $('go').disabled=files.length===0; } };
+  $('go').onclick=async function(){ $('go').disabled=true; setStatus('Working…'); $('pdfresult').classList.add('pdfhidden'); var ag=$('again'); if(ag) ag.classList.add('pdfhidden'); try{ await run(); if($('status').classList.contains('ok') && ag) ag.classList.remove('pdfhidden'); } catch(err){ console.error(err); setStatus('Something went wrong: '+err.message,'err'); } finally{ $('go').disabled=files.length===0; } };
+  var againBtn=$('again'); if(againBtn) againBtn.addEventListener('click',processAnother);
 
   if(single){
     var t=mount.getAttribute('data-tool'); if(!TOOLS[t]) t='merge';
@@ -627,6 +647,8 @@ function boot(){
     setTool(t);
   } else {
     var grid=$('toolgrid'); grid.addEventListener('click',function(e){var b=e.target.closest('.toolbtn');if(!b)return; if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button)return; e.preventDefault(); location.hash=b.dataset.t;});
+    renderRecent();
+    var rec=$('recent'); if(rec) rec.addEventListener('click',function(e){ var c=e.target.closest('.recchip'); if(!c) return; if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button) return; e.preventDefault(); location.hash=c.dataset.r; });
     var back=$('toolBack'); if(back) back.addEventListener('click',function(){location.hash=''; showGrid();});
     var searchBox=$('toolSearch'), hits=$('searchHits');
     searchBox.addEventListener('input',function(){ var res=searchTools(searchBox.value); hits.innerHTML=res.map(function(x){return '<a href="/'+x.c.page+'" data-go="'+x.t+'">'+x.c.title+' — <span style="color:var(--soft)">'+x.c.desc+'</span></a>';}).join(''); });
