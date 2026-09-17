@@ -11,6 +11,19 @@
 /* ---------- component CSS (theme vars come from the page's :root) ---------- */
 var CSS = `
 .toolsearch{position:relative;margin:0 0 16px}
+.searchrow{display:flex;gap:8px;align-items:stretch}
+.searchrow #toolSearch{flex:1;width:auto;min-width:0}
+.choosebtn{flex:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:0 14px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}
+.choosebtn:hover{border-color:var(--brand);color:var(--brand)}
+.dropsuggest{margin:0 0 16px;background:var(--card);border:1.5px solid var(--brand);border-radius:12px;padding:14px 16px;box-shadow:0 4px 14px rgba(51,85,255,.1)}
+.dropsuggest .sghead{font-size:14px;color:var(--ink);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.dropsuggest .sghead b{color:var(--brand);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%}
+.dropsuggest .sgx{margin-left:auto;border:0;background:transparent;color:var(--soft);cursor:pointer;font-size:15px;padding:2px 6px;flex:none}
+.dropsuggest .sgchips{display:flex;flex-wrap:wrap;gap:8px}
+.sgchip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:22px;padding:7px 13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.sgchip:hover{border-color:var(--brand);color:var(--brand)}
+.sgchip .sgi{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.toolgrid.dropactive{outline:2.5px dashed var(--brand);outline-offset:8px;border-radius:14px;background:var(--brand-soft)}
 #toolSearch{width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-size:15px;font-family:inherit}
 #toolSearch:focus{outline:none;border-color:var(--brand)}
 .searchhits{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;z-index:9;box-shadow:0 8px 24px rgba(0,0,0,.12)}
@@ -117,7 +130,7 @@ var TOOLS={
 };
 
 /* ---------- state + helpers ---------- */
-var current='merge', files=[], customState={}, single=false, mount=null;
+var current='merge', files=[], customState={}, single=false, mount=null, pending=[];
 var $=function(id){return document.getElementById(id);};
 var fmt=function(b){return b<1024?b+' B': b<1048576?(b/1024).toFixed(0)+' KB':(b/1048576).toFixed(1)+' MB';};
 function setStatus(msg,cls){var s=$('status'); if(!s)return; s.textContent=msg; s.className='status '+(cls||'');}
@@ -145,7 +158,9 @@ function buildGridHTML(){
 function buildShell(){
   var html='';
   if(!single){
-    html+='<div class="toolsearch"><input type="text" id="toolSearch" placeholder="🔍 What do you want to do with your PDF? (e.g. "make my PDF smaller")" autocomplete="off"><div class="searchhits" id="searchHits"></div></div>';
+    html+='<div class="toolsearch"><div class="searchrow"><input type="text" id="toolSearch" placeholder="🔍 Search tools — e.g. make my PDF smaller" autocomplete="off"><button type="button" class="choosebtn" id="chooseFiles">📂 Choose files</button></div><div class="searchhits" id="searchHits"></div></div>';
+    html+='<input type="file" id="homePicker" class="pdfhidden" multiple accept="application/pdf,image/jpeg,image/png">';
+    html+='<div class="dropsuggest pdfhidden" id="dropSuggest"></div>';
     html+='<div class="toolgrid" id="toolgrid">'+buildGridHTML()+'</div>';
   }
   html+='<div id="toolPane"'+(single?'':' class="pdfhidden"')+'>'
@@ -169,7 +184,7 @@ function showGrid(){
   var g=$('toolgrid'), p=$('toolPane');
   if(g) g.classList.remove('pdfhidden');
   if(p) p.classList.add('pdfhidden');
-  files=[]; customState={};
+  files=[]; customState={}; hideSuggest();
 }
 
 function setTool(t){
@@ -455,6 +470,39 @@ function initAds(){ if(!ADSENSE_CLIENT) return; var s=document.createElement('sc
 /* ---------- search (full mode only) ---------- */
 function searchTools(q){ q=q.toLowerCase().trim(); if(!q) return []; return Object.keys(TOOLS).map(function(t){ var c=TOOLS[t]; var hay=(t+' '+c.title+' '+c.desc+' '+(c.kw||'')).toLowerCase(); var score=0; q.split(/\s+/).forEach(function(w){ if(w && hay.indexOf(w)>-1) score += hay.indexOf(w)<40?2:1; }); return {t:t,c:c,score:score}; }).filter(function(x){return x.score>0;}).sort(function(a,b){return b.score-a.score;}).slice(0,5); }
 
+/* ---------- drop-anywhere suggestions (full mode) ---------- */
+function isPdfFile(f){ return f.type==='application/pdf' || (!f.type && /\.pdf$/i.test(f.name)) || /\.pdf$/i.test(f.name); }
+function isImgFile(f){ return /^image\/(jpeg|png)$/.test(f.type) || /\.(jpe?g|png)$/i.test(f.name); }
+function toolAcceptsFile(t,f){
+  if(t.accept.split(',').indexOf(f.type)>-1) return true;
+  var wantsPdf=t.accept.indexOf('pdf')>-1, wantsImg=t.accept.indexOf('image/')>-1;
+  if(isPdfFile(f) && wantsPdf) return true;
+  if(isImgFile(f) && wantsImg) return true;
+  return false;
+}
+function suggestKeys(arr){
+  var pdfs=arr.filter(isPdfFile), imgs=arr.filter(isImgFile), order;
+  if(imgs.length && !pdfs.length) order=['img2pdf','ocr'];
+  else if(pdfs.length && !imgs.length) order = pdfs.length>1
+    ? ['merge','compress','split','rotate','organize','protect','pdf2img','pdf2png','pagenum','watermark','extract','pdf2word','metadata','delete']
+    : ['compress','split','rotate','organize','protect','delete','pagenum','watermark','sign','pdf2img','pdf2png','pdf2word','extract','metadata','ocr'];
+  else order=['merge','img2pdf'];
+  return order.filter(function(k){ return arr.every(function(f){ return toolAcceptsFile(TOOLS[k],f); }); }).slice(0,6);
+}
+function showSuggest(list){
+  var arr=[].slice.call(list).filter(function(f){ return isPdfFile(f)||isImgFile(f); });
+  var panel=$('dropSuggest'); if(!panel) return;
+  if(!arr.length){ setStatus(''); return; }
+  pending=arr;
+  var keys=suggestKeys(arr);
+  var name=arr.length===1?arr[0].name:arr.length+' files';
+  var chips=keys.map(function(k){ var t=TOOLS[k]; return '<button class="sgchip" data-sg="'+k+'"><span class="sgi tbic-'+t.ic+'">'+t.icon+'</span>'+(t.tab||t.title)+'</button>'; }).join('');
+  panel.innerHTML='<div class="sghead">What do you want to do with <b>'+escapeHtml(name)+'</b>?<button class="sgx" id="sgClose" aria-label="Dismiss suggestions">✕</button></div><div class="sgchips">'+chips+'</div>';
+  panel.classList.remove('pdfhidden');
+  panel.scrollIntoView({block:'nearest'});
+}
+function hideSuggest(){ var p=$('dropSuggest'); if(p){ p.classList.add('pdfhidden'); p.innerHTML=''; } pending=[]; }
+
 /* ---------- boot ---------- */
 function boot(){
   mount=$('pdfApp'); if(!mount) return;
@@ -485,6 +533,28 @@ function boot(){
     hits.addEventListener('click',function(e){var b=e.target.closest('[data-go]');if(!b)return; if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button)return; e.preventDefault(); location.hash=b.dataset.go; searchBox.value=''; hits.innerHTML=''; searchBox.blur();});
     searchBox.addEventListener('keydown',function(e){if(e.key==='Enter'){var r=searchTools(searchBox.value)[0]; if(r){location.hash=r.t;searchBox.value='';hits.innerHTML='';searchBox.blur();}}});
     document.addEventListener('click',function(e){if(!e.target.closest('.toolsearch'))hits.innerHTML='';});
+
+    // "Choose files" button on the grid -> same suggestion flow as a drop.
+    var homePicker=$('homePicker'), chooseBtn=$('chooseFiles');
+    if(chooseBtn) chooseBtn.addEventListener('click',function(){ homePicker.value=''; homePicker.click(); });
+    if(homePicker) homePicker.addEventListener('change',function(e){ if(e.target.files.length) showSuggest(e.target.files); });
+
+    // Suggestion panel: a chip routes to the tool with the files already added.
+    var suggest=$('dropSuggest');
+    if(suggest) suggest.addEventListener('click',function(e){
+      if(e.target.closest('#sgClose')){ hideSuggest(); return; }
+      var chip=e.target.closest('.sgchip'); if(!chip) return;
+      var keep=pending; var k=chip.dataset.sg;
+      setTool(k); addFiles(keep);
+      try{ history.replaceState(null,'','#'+k); }catch(_){}
+      var ds=$('dropSuggest'); if(ds){ ds.classList.add('pdfhidden'); ds.innerHTML=''; } pending=[];
+    });
+
+    // Drop a file anywhere on the app while the grid is showing.
+    var gridVisible=function(){ return !$('toolgrid').classList.contains('pdfhidden'); };
+    ['dragover','dragenter'].forEach(function(ev){ mount.addEventListener(ev,function(e){ if(!gridVisible())return; if(e.target.closest('#drop'))return; e.preventDefault(); $('toolgrid').classList.add('dropactive'); }); });
+    ['dragleave','dragend'].forEach(function(ev){ mount.addEventListener(ev,function(e){ if(e.relatedTarget && mount.contains(e.relatedTarget))return; $('toolgrid').classList.remove('dropactive'); }); });
+    mount.addEventListener('drop',function(e){ if(!gridVisible())return; if(e.target.closest('#drop'))return; e.preventDefault(); $('toolgrid').classList.remove('dropactive'); if(e.dataTransfer&&e.dataTransfer.files.length) showSuggest(e.dataTransfer.files); });
     var validTool=function(t){return Object.prototype.hasOwnProperty.call(TOOLS,t);};
     var fromHash=function(){var h=location.hash.replace('#','');return validTool(h)?h:'';};
     var initHash=fromHash();
