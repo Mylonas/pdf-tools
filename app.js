@@ -98,7 +98,7 @@ var st=document.createElement('style'); st.textContent=CSS; document.head.append
 
 /* ---------- tool registry ---------- */
 var OPT = {
-  compress:`<div class="opts"><div><label>Compression level</label><select id="clevel"><option value="strong">Strong — smallest file</option><option value="balanced" selected>Balanced — recommended</option><option value="light">Light — best quality</option></select></div><div class="optnote">Rebuilds pages as compressed images. Text becomes non-selectable.</div></div>`,
+  compress:`<div class="opts"><div><label>Compression level</label><select id="clevel"><option value="strong">Strong — smallest file</option><option value="balanced" selected>Balanced — recommended</option><option value="light">Light — best quality</option><option value="lossless">Lossless — keep text selectable</option></select></div><div class="optnote">Strong / Balanced / Light rebuild pages as compressed images (text becomes non-selectable). Lossless keeps text and links intact but only trims file structure, so it saves less.</div></div>`,
   split:`<div class="opts"><div><label>Pages to extract (e.g. 1-3, 5, 8-10)</label><input type="text" id="ranges" placeholder="1-3, 5" style="min-width:180px"></div></div>`,
   delete:`<div class="opts"><div><label>Pages to delete (e.g. 2, 5-7)</label><input type="text" id="delRanges" placeholder="2, 5-7" style="min-width:180px"></div></div>`,
   rotate:`<div class="opts"><div><label>Rotate by</label><select id="angle"><option value="90">90° right</option><option value="180">180°</option><option value="270">90° left</option></select></div></div>`,
@@ -319,9 +319,22 @@ async function run(){
     showResult('<b>Done.</b> '+pdf.numPages+' pages · '+words.toLocaleString()+' words · '+chars.toLocaleString()+' characters.'+(words===0?'<br>No selectable text found — this looks like a scanned/image PDF (try OCR).':''));
   }
   else if(current==='compress'){
+    var clevel=$('clevel').value;
     var inBytes=await files[0].arrayBuffer(); var inSize=inBytes.byteLength;
+    if(clevel==='lossless'){
+      setStatus('Rebuilding file structure (keeping text)…');
+      var ldoc=await PDFDocument.load(inBytes,{updateMetadata:false});
+      ldoc.setTitle('');ldoc.setAuthor('');ldoc.setSubject('');ldoc.setKeywords([]);ldoc.setProducer('');ldoc.setCreator('');
+      var lout=await ldoc.save({useObjectStreams:true}); var lsize=lout.byteLength;
+      if(lsize>=inSize){ setStatus("This PDF is already compact — a lossless pass can't make it smaller without rasterising.",'err'); showResult('Original: <b>'+fmt(inSize)+'</b> · Lossless attempt: '+fmt(lsize)+' (no gain). For a real size cut, switch to <b>Balanced</b> or <b>Strong</b> — those rasterise pages, so text becomes non-selectable.'); return; }
+      var lpct=Math.round((1-lsize/inSize)*100);
+      pdfDownload(lout,'compressed.pdf','application/pdf'); setStatus('✓ Compressed losslessly — text stays selectable.','ok');
+      if(lpct<3){ showResult('Original: '+fmt(inSize)+' → New: <b>'+fmt(lsize)+'</b> · only <b>'+lpct+'% smaller</b>. Lossless only trims structure, so the gain is small here. For a bigger cut try <b>Balanced</b> or <b>Strong</b> (they rasterise pages, so text is no longer selectable).'); }
+      else { showResult('Original: '+fmt(inSize)+' → New: <b>'+fmt(lsize)+'</b> · <b>'+lpct+'% smaller</b>. Text and links stay selectable.'); }
+      return;
+    }
     var pdf=await pdfjsLib.getDocument({data:inBytes.slice(0)}).promise;
-    var preset={strong:{scale:1.0,q:0.5},balanced:{scale:1.5,q:0.72},light:{scale:2.0,q:0.85}}[$('clevel').value];
+    var preset={strong:{scale:1.0,q:0.5},balanced:{scale:1.5,q:0.72},light:{scale:2.0,q:0.85}}[clevel];
     var out=await PDFDocument.create();
     for(var n=1;n<=pdf.numPages;n++){ setStatus('Compressing page '+n+' of '+pdf.numPages+'…'); var page=await pdf.getPage(n); var ptVp=page.getViewport({scale:1}); var blob=await renderPageToJpeg(page,preset.scale,preset.q); var img=await out.embedJpg(await blob.arrayBuffer()); var pg=out.addPage([ptVp.width,ptVp.height]); pg.drawImage(img,{x:0,y:0,width:ptVp.width,height:ptVp.height}); }
     var outBytes=await out.save(), outSize=outBytes.byteLength;
