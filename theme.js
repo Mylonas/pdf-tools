@@ -61,4 +61,11 @@
       document.querySelectorAll('script[src*="adsbygoogle"]').forEach(function(s){s.remove();});
     };
   });
+
+  // Register the service worker for offline support (see sw.js).
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('/sw.js').catch(function(){});
+    });
+  }
 })();
