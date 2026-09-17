@@ -17,13 +17,13 @@
 {"@type":"HowTo","name":"How to compress a PDF for free","description":"Compress a PDF in your browser without uploading it.","step":[
 {"@type":"HowToStep","name":"Open the compressor","text":"Open the Compress PDF tool on meldpdf."},
 {"@type":"HowToStep","name":"Add your file","text":"Drag your PDF in or click to choose it. It stays on your device."},
-{"@type":"HowToStep","name":"Pick a level","text":"Choose Strong, Balanced or Light compression."},
+{"@type":"HowToStep","name":"Pick a level","text":"Choose Strong, Balanced, Light, or Lossless (keeps text selectable) compression."},
 {"@type":"HowToStep","name":"Download","text":"Download the smaller PDF and check the before/after size."}]},
 {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"meldpdf","item":"https://meldpdf.com/"},{"@type":"ListItem","position":2,"name":"Compress PDF","item":"https://meldpdf.com/compress-pdf"}]},
 {"@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"Is my PDF uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. meldpdf compresses your PDF entirely in your browser using WebAssembly. The file never leaves your device."}},
 {"@type":"Question","name":"How do I get a PDF under 5 MB?","acceptedAnswer":{"@type":"Answer","text":"Choose the Balanced or Strong level and check the reported new size. Strong gives the smallest file; if it's still too big, delete pages you don't need first."}},
-{"@type":"Question","name":"Will the text still be selectable after compressing?","acceptedAnswer":{"@type":"Answer","text":"This compressor rebuilds each page as a compressed image, so text becomes non-selectable. If you need selectable text, re-export from the source at a lower DPI instead."}}
+{"@type":"Question","name":"Will the text still be selectable after compressing?","acceptedAnswer":{"@type":"Answer","text":"The Strong, Balanced and Light levels rebuild each page as a compressed image, so text becomes non-selectable. Choose the Lossless level to keep text and links selectable — it saves less because nothing is rasterised."}}
 ]}
 ]}
 </script>
@@ -44,7 +44,7 @@
   <h2>How to compress a PDF</h2>
   <ol class="steps">
     <li><strong>Open the <a href="/compress-pdf">Compress PDF</a> tool</strong> and drop your PDF in (or click to choose it).</li>
-    <li><strong>Pick a level.</strong> <em>Strong</em> gives the smallest file, <em>Balanced</em> is the sweet spot, <em>Light</em> keeps the most quality.</li>
+    <li><strong>Pick a level.</strong> <em>Strong</em> gives the smallest file, <em>Balanced</em> is the sweet spot, <em>Light</em> keeps the most quality, and <em>Lossless — keep text selectable</em> trims file structure without turning pages into images (smaller savings, but text and links survive).</li>
     <li><strong>Download.</strong> You'll see the original size, the new size, and the percentage saved.</li>
   </ol>
 
@@ -54,12 +54,12 @@
   <p>Most oversized PDFs are heavy because of <strong>images and scans</strong>. This tool re-renders each page as a compressed JPEG at a lower resolution and rebuilds the PDF, which is what shrinks the file. The trade-off: the result is image-based, so text is no longer selectable and OCR is lost. For documents you only need to <em>read, email or upload</em>, that's usually a perfect trade.</p>
 
   <h2>When to use a different approach</h2>
-  <p>If you need selectable text, form fields, or a fully searchable document, don't compress to images — re-export from the original source at 150–200&nbsp;DPI instead. Only need part of the document? <a href="/delete-pages-from-pdf">Delete the pages you don't need</a> first to save even more.</p>
+  <p>If you need selectable text, form fields, or a fully searchable document, use the <strong>Lossless — keep text selectable</strong> level: it strips metadata and rewrites the PDF with object streams, so the text stays selectable and links keep working. It saves less than the image levels (and nothing on an already-compact file), so for a big cut on an image-heavy PDF stick with Balanced or Strong, or re-export from the original source at 150–200&nbsp;DPI. Only need part of the document? <a href="/delete-pages-from-pdf">Delete the pages you don't need</a> first to save even more.</p>
 
   <h2>Frequently asked questions</h2>
   <details><summary>Is my PDF uploaded to a server?</summary><p>No. Compression runs entirely in your browser. See our <a href="/privacy">privacy policy</a>.</p></details>
   <details><summary>How do I get a PDF under 5 MB?</summary><p>Use Balanced or Strong and check the reported new size. If it's still too big, delete unneeded pages first, then compress.</p></details>
-  <details><summary>Will the text still be selectable?</summary><p>No — pages become compressed images. If you need selectable text, re-export from the source at a lower DPI.</p></details>
+  <details><summary>Will the text still be selectable?</summary><p>With Strong, Balanced or Light, no — pages become compressed images. Choose the <strong>Lossless — keep text selectable</strong> level to keep text and links intact; it saves less, but nothing is rasterised.</p></details>
 
   <p style="margin-top:28px;color:var(--soft);font-size:13px">Last updated: 3 September 2026.</p>
 
@@ -72,6 +72,6 @@
   </div>
   <footer><a href="/">meldpdf</a> · <a href="/about">About</a> · <a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="/cookie-policy">Cookies</a> · <a href="/terms">Terms</a></footer>
 </div>
-<script defer src="/app.js?v=4"></script>
+<script defer src="/app.js?v=5"></script>
 </body>
 </html>
