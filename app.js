@@ -123,7 +123,7 @@ var TOOLS={
   extract:{page:'extract-text-from-pdf',title:'Extract text',tab:'Extract text',desc:'Pull all text out of a PDF and count pages, words and characters.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Extract text',kw:'extract text copy word count character count read',icon:'📝',ic:'blue',sdesc:'Copy text from PDF'},
   organize:{page:'organize-pdf',title:'Organize pages',tab:'Organize pages',desc:'Reorder (drag), rotate or delete individual pages, then save.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Save organized PDF',custom:'organize',kw:'organize reorder rearrange move sort arrange pages thumbnails manage',icon:'📋',ic:'teal',sdesc:'Reorder and arrange'},
   sign:{page:'sign-pdf',title:'Sign PDF',tab:'Sign PDF',desc:'Draw or upload a signature and place it on a page.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Sign & download',custom:'sign',kw:'sign signature esign electronic autograph initials',icon:'✍️',ic:'green',sdesc:'Draw your signature'},
-  pdf2word:{page:'pdf-to-word',title:'PDF → Word',tab:'PDF → Word',desc:'Extract the text into an editable Word (.doc) document.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to Word',kw:'pdf to word doc docx editable convert microsoft',icon:'📄',ic:'blue',sdesc:'Convert PDF to DOCX'},
+  pdf2word:{page:'pdf-to-word',title:'PDF → Word (.docx)',tab:'PDF → Word',desc:'Extract the text into an editable Word (.docx) document — one paragraph per line.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Convert to Word (.docx)',kw:'pdf to word doc docx editable convert microsoft',icon:'📄',ic:'blue',sdesc:'Convert PDF to DOCX'},
   metadata:{page:'remove-pdf-metadata',title:'Metadata viewer & remover',tab:'Metadata',desc:"See a PDF’s hidden metadata, and download a clean copy with it stripped.",accept:'application/pdf',hint:'One PDF file',multi:false,batch:true,btn:'View & strip metadata',kw:'metadata properties author title info remove strip clean privacy exif',icon:'🔍',ic:'pink',sdesc:'View and strip info'},
   ocr:{page:'ocr-pdf',title:'OCR scanned PDF',tab:'OCR (scanned)',desc:'Read text from a scanned or image-only PDF (or an image) using on-device OCR.',accept:'application/pdf,image/jpeg,image/png',hint:'A scanned PDF or image',multi:false,btn:'Run OCR',opts:OPT.ocr,kw:'ocr scanned image searchable recognize text scan optical',icon:'👁️',ic:'amber',sdesc:'Read scanned text'},
   protect:{page:'protect-pdf',title:'Protect / Unlock PDF',tab:'Protect / Unlock',desc:'Add a password to a PDF, or remove one you know.',accept:'application/pdf',hint:'One PDF file',multi:false,btn:'Apply',opts:OPT.protect,kw:'protect password encrypt lock secure unlock remove password decrypt permissions',icon:'🔒',ic:'red',sdesc:'Password encrypt'}
@@ -252,6 +252,20 @@ function renderPageToJpeg(page,scale,quality){
   return page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise.then(function(){
     return new Promise(function(r){canvas.toBlob(function(b){r(b);},'image/jpeg',quality);});
   });
+}
+
+/* group pdf.js text items into visual lines by their y position */
+function groupTextLines(items){
+  var lines=[], cur=null, curY=null;
+  items.forEach(function(it){
+    if(it.str==null) return;
+    if(!it.str){ if(it.hasEOL) curY=null; return; }
+    var y=it.transform?Math.round(it.transform[5]):0;
+    if(curY===null || Math.abs(y-curY)>3){ cur=[]; lines.push(cur); curY=y; }
+    cur.push(it.str);
+    if(it.hasEOL) curY=null;
+  });
+  return lines.map(function(a){ return a.join(' ').replace(/\s+/g,' ').trim(); }).filter(function(s){ return s.length; });
 }
 
 /* ---------- batch processing (batch:true tools, >1 file -> one zip) ---------- */
@@ -421,13 +435,21 @@ async function run(){
     showResult('<b>Metadata found'+(any?'':' — none')+' (stripped from your download):</b><br>'+rows+'<div style="margin-top:6px">Pages: '+src.getPageCount()+'</div>');
   }
   else if(current==='pdf2word'){
-    var data=await files[0].arrayBuffer(); var pdf=await pdfjsLib.getDocument({data:data}).promise; var paras=[];
-    for(var n=1;n<=pdf.numPages;n++){ setStatus('Reading page '+n+' of '+pdf.numPages+'…'); var page=await pdf.getPage(n); var tc=await page.getTextContent(); var line=tc.items.map(function(it){return it.str;}).join(' ').replace(/\s+/g,' ').trim(); if(line) paras.push(line); if(n<pdf.numPages) paras.push(null); }
-    var words=(paras.filter(Boolean).join(' ').match(/\S+/g)||[]).length;
-    var body=paras.map(function(p){return p===null?'<br clear="all" style="page-break-before:always">':'<p>'+escapeHtml(p)+'</p>';}).join('\n');
-    var doc="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'><title>Converted document</title></head><body>"+body+"</body></html>";
-    pdfDownload(new Blob(['﻿'+doc],{type:'application/msword'}),'converted.doc','application/msword'); setStatus('✓ Converted to Word (.doc).','ok');
-    showResult('<b>Done.</b> '+pdf.numPages+' pages · ~'+words.toLocaleString()+' words. Opens in Word, Google Docs or LibreOffice. This keeps the <b>text</b> only — original layout, columns and images are not reproduced.'+(words===0?'<br>No selectable text found — for a scanned PDF, run OCR first.':''));
+    var data=await files[0].arrayBuffer(); var pdf=await pdfjsLib.getDocument({data:data}).promise;
+    setStatus('Loading Word engine…'); var D=await ensureDocx();
+    var children=[], words=0;
+    for(var n=1;n<=pdf.numPages;n++){
+      setStatus('Reading page '+n+' of '+pdf.numPages+'…');
+      var page=await pdf.getPage(n); var tc=await page.getTextContent();
+      var lines=groupTextLines(tc.items);
+      lines.forEach(function(line){ words+=(line.match(/\S+/g)||[]).length; children.push(new D.Paragraph({children:[new D.TextRun(line)]})); });
+      if(n<pdf.numPages) children.push(new D.Paragraph({children:[new D.PageBreak()]}));
+    }
+    if(!children.length) children.push(new D.Paragraph({children:[new D.TextRun('')]}));
+    var docFile=new D.Document({sections:[{children:children}]});
+    var blob=await D.Packer.toBlob(docFile);
+    pdfDownload(blob,'converted.docx','application/vnd.openxmlformats-officedocument.wordprocessingml.document'); setStatus('✓ Converted to Word (.docx).','ok');
+    showResult('<b>Done.</b> '+pdf.numPages+' pages · ~'+words.toLocaleString()+' words. Opens in Word, Google Docs or LibreOffice with no compatibility warning. This keeps the <b>text</b> only — original layout, columns and images are not reproduced.'+(words===0?'<br>No selectable text found — for a scanned PDF, run OCR first.':''));
   }
   else if(current==='organize'){
     var order=customState.order.filter(function(o){return !o.del;});
@@ -528,6 +550,7 @@ function loadScript(src){return new Promise(function(res,rej){var s=document.cre
 var _tess;
 async function loadTesseract(lang){ if(!_tess){ await loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js'); _tess=true; } return await Tesseract.createWorker(lang); }
 async function ensureFflate(){ if(!window.fflate){ await loadScript('/vendor/fflate.min.js'); } return window.fflate; }
+async function ensureDocx(){ if(!window.docx){ await loadScript('/vendor/docx.min.js'); } return window.docx; }
 var QPDF_BASE='https://cdn.jsdelivr.net/npm/@neslinesli93/qpdf-wasm@0.3.0/dist/';
 var _qpdfFactory;
 async function qpdfRun(args,bytes){
