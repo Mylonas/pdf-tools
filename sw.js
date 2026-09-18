@@ -10,7 +10,7 @@ var RUNTIME = 'meldpdf-cdn-' + VERSION; // cross-origin engines (tesseract/qpdf)
 /* Core assets + every page (clean URLs, as served by Cloudflare Pages). */
 var CORE = [
   '/', '/manifest.json',
-  '/app.js?v=8', '/theme.js', '/style.css',
+  '/app.js?v=9', '/theme.js', '/style.css',
   '/vendor/pdf-lib.min.js', '/vendor/pdf.min.js', '/vendor/pdf.worker.min.js',
   '/vendor/fflate.min.js', '/vendor/docx.min.js',
   '/icon-192.png', '/icon-512.png',
