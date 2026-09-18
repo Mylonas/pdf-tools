@@ -3,7 +3,7 @@
    cached app.js. skipWaiting()+clients.claim() make the new SW take over
    promptly, so a second reload after a deploy serves the new assets. */
 'use strict';
-var VERSION = 'v8';
+var VERSION = 'v9';
 var CACHE = 'meldpdf-' + VERSION;      // precache + same-origin runtime
 var RUNTIME = 'meldpdf-cdn-' + VERSION; // cross-origin engines (tesseract/qpdf)
 
