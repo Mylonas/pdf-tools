@@ -69,3 +69,42 @@
     });
   }
 })();
+
+/* "Install app" button — shown only when the browser reports the PWA is
+   installable (fires beforeinstallprompt), hidden once installed. */
+(function(){
+  var deferred = null, btn = null;
+  function installed(){
+    try{ return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+    catch(e){ return false; }
+  }
+  function sync(){ if(btn) btn.style.display = (deferred && !installed()) ? '' : 'none'; }
+
+  // Register early so the event isn't missed before DOMContentLoaded.
+  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; sync(); });
+  window.addEventListener('appinstalled', function(){ deferred = null; sync(); });
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var host = document.querySelector('.nav') || document.querySelector('.topbar');
+    if(!host) return;
+    btn = document.createElement('button');
+    btn.id = 'installApp';
+    btn.type = 'button';
+    btn.textContent = '⬇ Install app';
+    btn.title = 'Install meldpdf as an app';
+    btn.setAttribute('aria-label', 'Install meldpdf as an app');
+    btn.style.cssText = 'background:var(--brand);color:#fff;border:1.5px solid var(--brand);border-radius:20px;' +
+      'cursor:pointer;font-size:13px;font-weight:700;line-height:1;padding:6px 12px;margin-left:4px';
+    btn.addEventListener('click', function(){
+      if(!deferred) return;
+      btn.disabled = true;
+      deferred.prompt();
+      var choice = deferred.userChoice;
+      deferred = null;
+      if(choice && choice.then){ choice.then(function(){ btn.disabled = false; sync(); }, function(){ btn.disabled = false; sync(); }); }
+      else { btn.disabled = false; sync(); }
+    });
+    host.appendChild(btn);
+    sync();
+  });
+})();
