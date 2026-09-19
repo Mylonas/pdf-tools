@@ -30,7 +30,6 @@
 <!-- Google Search Console (HTML-tag method): -->
 <!-- <meta name="google-site-verification" content="PASTE_SC_TOKEN"> -->
 <meta name="google-adsense-account" content="ca-pub-4547647290394610">
-<!-- AdSense ads: after approval, put your ca-pub id in ADSENSE_CLIENT (bottom of file); the loader + slots activate automatically. -->
 <style>
   :root{
     /* Light (white) by default. Toggle to dark via the nav button. */
@@ -121,9 +120,6 @@
   .nav a{color:var(--soft);text-decoration:none;font-weight:600}
   .nav a:hover{color:var(--brand)}
   #pdfApp{min-height:520px}
-  .adslot{display:none;margin:22px 0;min-height:90px;align-items:center;justify-content:center;
-    border:1px dashed var(--line);border-radius:10px;color:var(--soft);font-size:12px;background:var(--card)}
-  .adslot[data-live="1"]{border:0;min-height:0;background:transparent}
   .guides{margin-top:36px}
   .guides h2{font-size:19px;color:var(--ink)}
   .guidelinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
@@ -165,13 +161,6 @@
     <li><a href="/ocr-pdf">OCR scanned PDF</a></li>
     <li><a href="/protect-pdf">Protect / Unlock PDF</a></li>
   </ul></nav></noscript></div>
-
-  <div class="adslot" data-ad="top">Advertisement</div>
-
-
-
-  <div class="adslot" data-ad="bottom">Advertisement</div>
-
   <footer>
     <a href="/about">About</a> ·
     <a href="/contact">Contact</a> ·
@@ -184,6 +173,6 @@
   </footer>
 </div>
 
-<script defer src="/app.js?v=9"></script>
+<script defer src="/app.js?v=10"></script>
 </body>
 </html>

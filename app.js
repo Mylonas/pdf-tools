@@ -574,10 +574,6 @@ async function qpdfRun(args,bytes){
   return out;
 }
 
-/* ---------- ads (guarded; runs anywhere .adslot exists) ---------- */
-var ADSENSE_CLIENT=""; /* disabled until AdSense approval — was ca-pub-4547647290394610 */
-function initAds(){ if(!ADSENSE_CLIENT) return; var s=document.createElement('script'); s.async=true; s.crossOrigin='anonymous'; s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADSENSE_CLIENT; document.head.appendChild(s); document.querySelectorAll('.adslot').forEach(function(slot){ slot.dataset.live='1'; slot.style.display='flex'; slot.textContent=''; var ins=document.createElement('ins'); ins.className='adsbygoogle'; ins.style.display='block'; ins.style.width='100%'; ins.setAttribute('data-ad-client',ADSENSE_CLIENT); ins.setAttribute('data-ad-format','auto'); ins.setAttribute('data-full-width-responsive','true'); slot.appendChild(ins); (window.adsbygoogle=window.adsbygoogle||[]).push({}); }); }
-
 /* ---------- search (full mode only) ---------- */
 function searchTools(q){ q=q.toLowerCase().trim(); if(!q) return []; return Object.keys(TOOLS).map(function(t){ var c=TOOLS[t]; var hay=(t+' '+c.title+' '+c.desc+' '+(c.kw||'')).toLowerCase(); var score=0; q.split(/\s+/).forEach(function(w){ if(w && hay.indexOf(w)>-1) score += hay.indexOf(w)<40?2:1; }); return {t:t,c:c,score:score}; }).filter(function(x){return x.score>0;}).sort(function(a,b){return b.score-a.score;}).slice(0,5); }
 
