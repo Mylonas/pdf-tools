@@ -35,7 +35,7 @@
   });
 })();
 
-/* Cookie consent banner — GDPR compliance */
+/* Cookie consent banner — required for AdSense GDPR compliance */
 (function(){
   try{if(localStorage.getItem('cookieConsent'))return;}catch(e){return;}
   document.addEventListener('DOMContentLoaded',function(){
